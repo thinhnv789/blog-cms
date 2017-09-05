@@ -17,7 +17,7 @@ html {
 }
 
 body {
-    margin-bottom: 48px
+    /* margin-bottom: 48px */
 }
 
 .Footer,
@@ -376,13 +376,13 @@ body {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset
 }
 
-#menu>li:hover>a,
+/* #menu>li:hover>a,
 #menu>li:focus>a {
     background-color: rgba(0, 0, 0, 0.1);
     outline: none;
     -webkit-box-shadow: none;
     box-shadow: none
-}
+} */
 
 #menu>li ul {
     -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
@@ -447,7 +447,7 @@ body {
         left: auto;
         right: 100%
     }
-    #menu:not(.affix) li:hover>ul {
+    .sidebar-left-mini #menu:not(.affix) li:hover>ul {
         display: inherit;
         visibility: visible
     }

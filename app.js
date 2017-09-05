@@ -7,6 +7,10 @@ var bodyParser = require('body-parser');
 var sass = require('node-sass');
 var sassMiddleware = require('node-sass-middleware');
 
+// Configuration
+var dbConfig = require('./src/config/dbConfig.json');
+var Database = require('./src/config/dbconnection');
+
 var index = require('./src/routes/index');
 var users = require('./src/routes/users');
 
@@ -33,6 +37,7 @@ app.use(
   })
 );   
 
+app.use('/libs', express.static(__dirname + '/node_modules/'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
@@ -44,6 +49,17 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
+// Connect to mongo database
+Database.config(
+  dbConfig && dbConfig.mongodb && dbConfig.mongodb.address ? dbConfig.mongodb.address : '', 'sbadmin',
+  
+  dbConfig.mongodb && dbConfig.mongodb.options ? dbConfig.mongodb.options : undefined,
+  function(err, message) {
+    if (!err) console.info('  - Mongodb is connected');
+    
+  }
+);
 
 // error handler
 app.use(function(err, req, res, next) {

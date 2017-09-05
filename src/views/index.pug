@@ -1,5 +1,12 @@
-extends layout
-
+extends ./layout/main
+block stylesheets
+  link(rel='stylesheet', href='/libs/froala-editor/css/froala_editor.pkgd.min.css')
+  link(rel='stylesheet', href='/libs/froala-editor/css/froala_style.min.css')
 block content
   h1= title
-  p Welcome to #{title}
+  p Welcome to #{title} abc
+  textarea#test-editor
+block scripts
+  script(src='/libs/froala-editor/js/froala_editor.pkgd.min.js')
+  script(src='/javascripts/editor-config.js')
+  
