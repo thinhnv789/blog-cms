@@ -58,7 +58,6 @@ body {
     -o-transition: all .3s ease-in-out;
     transition: all .3s ease-in-out;
     width: 250px;
-    min-height: 100vh;
     z-index: 999;
     background: rgba(0, 0, 0, 0.2);
     -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;

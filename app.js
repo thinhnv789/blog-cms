@@ -13,6 +13,7 @@ var Database = require('./src/config/dbconnection');
 
 var index = require('./src/routes/index');
 var users = require('./src/routes/users');
+var media = require('./src/routes/media');
 
 var app = express();
 
@@ -38,10 +39,12 @@ app.use(
 );   
 
 app.use('/libs', express.static(__dirname + '/node_modules/'));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/media', express.static(__dirname + '/media/'));
+app.use(express.static(path.join(__dirname, '/public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/media', media);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
