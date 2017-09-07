@@ -14,6 +14,7 @@ var Database = require('./src/config/dbconnection');
 var index = require('./src/routes/index');
 var users = require('./src/routes/users');
 var media = require('./src/routes/media');
+var category = require('./src/routes/category');
 
 var app = express();
 
@@ -45,6 +46,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/media', media);
+app.use('/category', category);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
