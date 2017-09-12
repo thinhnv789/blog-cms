@@ -1,0 +1,29 @@
+extends ../layout/main
+block stylesheets
+	link(rel='stylesheet', href='/libs/cropperjs/dist/cropper.min.css')
+	link(rel='stylesheet', href='/libs/magnific-popup/dist/magnific-popup.css')
+block scripts
+	script(src='/libs/cropperjs/dist/cropper.min.js')
+	script(src='/libs/magnific-popup/dist/jquery.magnific-popup.min.js')
+	script(src='/javascripts/cropper-config.js')
+block content
+	.row
+		.col-lg-12
+			.box.dark
+				header
+					.icons
+						i.fa.fa-table
+					h5 #{title}
+
+				input#image(type='file', name='image', onchange='readURL(this);')
+				//- #cropped_result
+				//- |         // Cropped image to display (only if u want)
+				//- button#crop_button Crop
+				//- |  // Will trigger crop event
+
+				a.image-cropper(href='#cropper-modal') Open modal
+				#cropper-modal.cropper-popup-block.mfp-hide
+					.cropper-block.image_container(style='width: 600px; height: 400px; margin: auto')
+						img#image-temp(src='#', alt='your image')
+						p
+							a.popup-modal-dismiss(href='#') Dismiss

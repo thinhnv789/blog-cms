@@ -1,4 +1,58 @@
 extends ../layout/main
+block stylesheets
+  link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+block scripts
+  script(src='/javascripts/bootstrap-chosen.js')
+  script.
+    $(function() {
+    $('.chosen-select-deselect').chosen({ allow_single_deselect: true });
+    $('.chosen-status').chosen({ allow_single_deselect: true, disable_search: true });
+    });
 block content
-  h1= title
-  p Welcome to #{title} abc
+  .row
+    .col-lg-8
+      .box.dark
+        header
+          .icons
+            i.fa.fa-edit
+          h5 #{title}
+          // .toolbar
+          .toolbar
+            nav(style='padding: 8px;')
+              a.btn.btn-danger.btn-xs.close-box(href='javascript:;')
+                i.fa.fa-times
+          // /.toolbar
+        #div-1.body.collapse.in(aria-expanded='true', style='')
+        form.form-horizontal(method='POST', action='/category/create', style="padding: 0 15px;")
+          .form-group
+            label.control-label.col-lg-4(for='text1') Category Name
+            .col-lg-8
+              input#text1.form-control(type='text', name='categoryName', placeholder='Enter category name')
+          .form-group
+            label.control-label.col-lg-4(for='text1') Alias
+            .col-lg-8
+              input#text1.form-control(type='text', name='alias', placeholder='Alias')  
+          .form-group
+            label.control-label.col-lg-4(for='text1') Parent Category
+            .col-lg-8
+              select.chosen-select-deselect(name='parentId', data-placeholder='Select Parent', style='width: 100%;')
+                option(value=null)
+                each cat in parents
+                  option(value=cat._id) #{cat.categoryName}
+                  if (cat.children.length > 0)
+                    each child in cat.children
+                      option(value=child._id) - #{child.categoryName}
+                      if (child.children.length > 0)
+                        each c in child.children
+                          option(value=c._id) -- #{c.categoryName}
+          .form-group
+            label.control-label.col-lg-4(for='text1') Status
+            .col-lg-8
+              select.chosen-status(name='status', data-placeholder='Status', style='width: 100px;')
+                option(value=1) Public
+                option(value=2) Draft
+          .form-group  
+            .col-lg-4
+            .col-lg-8
+              input#submit.btn.btn-success(type='submit', text='Submit')
+        

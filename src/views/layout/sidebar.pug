@@ -25,86 +25,20 @@
       a(href='dashboard.html')
         i.fa.fa-dashboard
         span.link-title  Dashboard
-    li.menu-dropdown
-            a(href='javascript:void(0);')
-              i.fa.fa-building
-              span.link-title Layouts
-              span.fa.arrow
-            ul.collapse(aria-expanded='false')
-              li
-                a(href='boxed.html')
-                  i.fa.fa-angle-right
-                  |   Boxed Layout
-              li
-                a(href='fixed-header-boxed.html')
-                  i.fa.fa-angle-right
-                  |   Boxed Layout & Fixed Header
-              li
-                a(href='fixed-header-fixed-mini-sidebar.html')
-                  i.fa.fa-angle-right
-                  |   Fixed Header and Fixed Mini Menu
-              li
-                a(href='fixed-header-menu.html')
-                  i.fa.fa-angle-right
-                  |   Fixed Header & Menu
-              li
-                a(href='fixed-header-mini-sidebar.html')
-                  i.fa.fa-angle-right
-                  |   Fixed Header & Mini Menu
-              li
-                a(href='fixed-header.html')
-                  i.fa.fa-angle-right
-                  |   Fixed Header
-              li
-                a(href='fixed-menu-boxed.html')
-                  i.fa.fa-angle-right
-                  |   Boxed Layout & Fixed Menu
-              li
-                a(href='fixed-menu.html')
-                  i.fa.fa-angle-right
-                  |   Fixed Menu
-              li
-                a(href='fixed-mini-sidebar.html')
-                  i.fa.fa-angle-right
-                  |   Fixed & Mini Menu
-              li
-                a(href='fxhmoxed.html')
-                  i.fa.fa-angle-right
-                  |   Boxed and Fixed Header & Nav
-              li
-                a(href='no-header-sidebar.html')
-                  i.fa.fa-angle-right
-                  |   No Header & Sidebars
-              li
-                a(href='no-header.html')
-                  i.fa.fa-angle-right
-                  |   No Header
-              li
-                a(href='no-left-right-sidebar.html')
-                  i.fa.fa-angle-right
-                  |   No Left & Right Sidebar
-              li
-                a(href='no-left-sidebar-main-search.html')
-                  i.fa.fa-angle-right
-                  |   No Left Sidebar & Main Search
-              li
-                a(href='no-left-sidebar.html')
-                  i.fa.fa-angle-right
-                  |   No Left Sidebar
-              li
-                a(href='no-main-search.html')
-                  i.fa.fa-angle-right
-                  |   No Main Search
-              li
-                a(href='no-right-sidebar.html')
-                  i.fa.fa-angle-right
-                  |   No Right Sidebar
-              li
-                a(href='sm.html')
-                  i.fa.fa-angle-right
-                  |   Mini Sidebar
-         
-           
+    li.menu-dropdown(class=(Array.isArray(current) && current[0]=='category') && 'active')
+      a(href='javascript:void(0);')
+        i.fa.fa-building
+        span.link-title  Danh mục
+        span.fa.arrow
+      ul.collapse(aria-expanded='false', class=(Array.isArray(current) && current[0]=='category') && 'in')
+        li(class=(Array.isArray(current) && current[1]=='index') && 'current-route')
+          a(href='/category')
+            i.fa.fa-table
+            |   Tất cả danh mục
+        li(class=(Array.isArray(current) && current[1]=='create') && 'current-route')
+          a(href='/category/create')
+            i.fa.fa-plus
+            |   Thêm danh mục mới
     li.nav-divider
     li.menu-dropdown
             a(href='javascript:;')

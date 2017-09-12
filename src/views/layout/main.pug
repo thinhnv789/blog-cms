@@ -1,10 +1,11 @@
 head
-  title= title
+  title=title
   meta(name='viewport', content='width=device-width, initial-scale=1')
   // Latest compiled and minified CSS
   link(rel='stylesheet', href='/libs/bootstrap/dist/css/bootstrap.min.css')
   link(rel='stylesheet', href='/libs/font-awesome/css/font-awesome.min.css')
   link(rel='stylesheet', href='/stylesheets/metis-admin.css')
+  link(rel='stylesheet', href='/stylesheets/main.css')
   block stylesheets
 body
   //block content
@@ -16,7 +17,8 @@ body
     // Content page
     #content
       .outer
-        block content
+        .bg-light
+          block content
   // Latest compiled JavaScript
   script(src='/libs/jquery/dist/jquery.min.js')
   // Latest compiled JavaScript

@@ -2,8 +2,10 @@ var express = require('express');
 var router = express.Router();
 var MediaController = require('../controllers/Media');
 
-/* Post Upload Image. */
-router.post('/upload_image', MediaController.postUploadImage);
-router.get('/load_images', MediaController.getLoadImages);
+/* Post froala Upload Image. */
+router.post('/upload_image', MediaController.postFroalaUploadImage);
+router.get('/load_images', MediaController.getFroalaLoadImages);
+
+router.get('/upload-image', MediaController.getUploadImage);
 
 module.exports = router;

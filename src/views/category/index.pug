@@ -1,0 +1,91 @@
+extends ../layout/main
+block stylesheets
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+block scripts
+	script(src='/javascripts/bootstrap-chosen.js')
+	script.
+		$(function() {
+		$('.chosen-select').chosen();
+		$('.chosen-select-deselect').chosen({ allow_single_deselect: true, disable_search: true });
+		});
+block content
+	.row
+		.col-lg-12
+			.box.dark
+				header
+					.icons
+						i.fa.fa-table
+					h5 #{title}
+				.user-actions
+					a.btn.btn-success(href='/category/create') Tạo mới
+					hr(style='border-top: 1px solid #d2d2d2')
+					form.form-horizontal(method='POST', action='/category/search')
+						.form-group
+							.col-lg-4
+								input#text1.form-control(type='text', name='categoryName', placeholder='Enter category name')
+							.col-lg-4
+								input#text2.form-control(type='text', name='categoryName', placeholder='Enter category name')
+							.col-lg-4
+								button.btn.btn-success(type='submit')
+									i.fa.fa-search
+									|  Search
+				table.table.table-striped.table-bordered.table-list
+					thead
+						tr
+							th.hidden-xs ID
+							th Tên danh mục
+							th Alias
+							th.text-center Trạng thái
+							th.text-center
+								em.fa.fa-cog
+					tbody
+						- var i = 1;
+						each cat in categories
+							tr
+								td.hidden-xs #{i}
+								td #{cat.categoryName}
+								td #{cat.alias}
+								td.text-center
+									select.chosen-select-deselect(name='parentId', data-placeholder='Select Parent', style='width: 100px;')
+										option(value=1, selected=(cat.status===1 || cat.status) ? true : false) Public
+										option(value=0, selected=(cat.status===0 || !cat.status) ? true : false) Draft
+								td(align='center')
+									a.btn.btn-default
+										em.fa.fa-pencil
+									a.btn.btn-danger
+										em.fa.fa-trash
+							- i += 1
+							if (cat.children.length > 0)
+								each child in cat.children
+									tr
+										td.hidden-xs #{i}
+										td.level-2 #{child.categoryName}
+											//- i.fa.fa-angle-right(aria-hidden='true')  #{child.categoryName}
+										td #{child.alias}
+										td.text-center
+											select.chosen-select-deselect(name='parentId', data-placeholder='Select Parent', style='width: 100px;')
+												option(value=1, selected=(child.status===1 || child.status) ? true : false) Public
+												option(value=0, selected=(child.status===0 || !child.status) ? true : false) Draft
+										td(align='center')
+											a.btn.btn-default
+												em.fa.fa-pencil
+											a.btn.btn-danger
+												em.fa.fa-trash
+										- i += 1
+									if (child.children.length > 0)
+										each c in child.children
+											tr
+												td.hidden-xs #{i}
+												td.level-3 #{c.categoryName}
+													//- i.fa.fa-angle-right(aria-hidden='true')  #{c.categoryName}
+												td #{c.alias}
+												td.text-center
+													select.chosen-select-deselect(name='parentId', data-placeholder='Select Parent', style='width: 100px;')
+														option(value=1, selected=(c.status===1 || c.status) ? true : false) Public
+														option(value=0, selected=(c.status===0 || !c.status) ? true : false) Draft
+												td(align='center')
+													a.btn.btn-default
+														em.fa.fa-pencil
+													a.btn.btn-danger
+														em.fa.fa-trash
+											- i += 1

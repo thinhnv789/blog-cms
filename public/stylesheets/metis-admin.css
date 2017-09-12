@@ -16,10 +16,6 @@ html {
     min-height: 100%
 }
 
-body {
-    /* margin-bottom: 48px */
-}
-
 .Footer,
 #footer {
     position: absolute;
@@ -150,7 +146,8 @@ body {
 }
 
 .head .search-bar .main-search {
-    border-bottom: 1px solid #7c7c7c
+    border-bottom: 1px solid #7c7c7c;
+    margin: 0;
 }
 
 .head .search-bar .main-search input[type="text"] {
@@ -349,6 +346,9 @@ body {
     position: relative;
     display: block
 }
+#menu li.current-route a {
+    color: #F60;
+}
 
 #menu a,
 #menu a:hover,
@@ -534,12 +534,19 @@ body:not(.sidebar-left-mini) #menu .nav-header {
 #content {
     -webkit-transition: width .4s;
     -o-transition: width .4s;
-    transition: width .4s
+    transition: width .4s;
 }
 
 .outer {
     padding: 10px;
     background-color: #6e6e6e
+}
+
+.outer .bg-light {
+    background: #fff;
+    color: #000;
+    min-height: 88%;
+    padding: 0 15px;
 }
 
 .outer:before,
