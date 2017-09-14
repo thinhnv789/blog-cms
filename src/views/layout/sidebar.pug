@@ -27,7 +27,7 @@
         span.link-title  Dashboard
     li.menu-dropdown(class=(Array.isArray(current) && current[0]=='category') && 'active')
       a(href='javascript:void(0);')
-        i.fa.fa-building
+        i.fa.fa-folder-open-o
         span.link-title  Danh mục
         span.fa.arrow
       ul.collapse(aria-expanded='false', class=(Array.isArray(current) && current[0]=='category') && 'in')
@@ -39,6 +39,20 @@
           a(href='/category/create')
             i.fa.fa-plus
             |   Thêm danh mục mới
+    li.menu-dropdown(class=(Array.isArray(current) && current[0]=='post') && 'active')
+      a(href='javascript:void(0);')
+        i.fa.fa-newspaper-o
+        span.link-title  Bài viết
+        span.fa.arrow
+      ul.collapse(aria-expanded='false', class=(Array.isArray(current) && current[0]=='post') && 'in')
+        li(class=(Array.isArray(current) && current[1]=='index') && 'current-route')
+          a(href='/post')
+            i.fa.fa-table
+            |   Tất cả bài viết
+        li(class=(Array.isArray(current) && current[1]=='create') && 'current-route')
+          a(href='/post/create')
+            i.fa.fa-plus
+            |   Viết bài mới
     li.nav-divider
     li.menu-dropdown
             a(href='javascript:;')

@@ -12,7 +12,9 @@
     "cropperjs": "^1.0.0",
     "debug": "~2.6.3",
     "express": "~4.15.2",
+    "file-type": "^6.1.0",
     "font-awesome": "^4.7.0",
+    "formidable": "^1.1.1",
     "froala-editor": "^2.6.5",
     "jquery": "^3.2.1",
     "mongoose": "^4.11.10",
@@ -20,6 +22,7 @@
     "node-sass": "^4.5.3",
     "node-sass-middleware": "^0.11.0",
     "pug": "~2.0.0-beta11",
+    "read-chunk": "^2.1.0",
     "serve-favicon": "~2.4.2",
     "wysiwyg-editor-node-sdk": "^2.3.4-rc.1"
   }

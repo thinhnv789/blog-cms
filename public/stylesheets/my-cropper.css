@@ -1,0 +1,26 @@
+.cropper-block{
+  position: relative;
+}
+.toolbar {
+  background-color: rgba(0,0,0,.5);
+  color: #fff;
+  height: 32px;
+  top: -32px;
+  left: 50%;
+  margin-left: -128px;
+  position: absolute;
+  width: 256px;
+  z-index: 1994;
+}
+.toolbar-button {
+  background-color: transparent;
+  border-width: 0;
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  float: left;
+  font-size: 14px;
+  height: 32px;
+  text-align: center;
+  width: 32px;
+}
