@@ -4,10 +4,18 @@ var Tag = require('../models/Tag');
 
 // Get all Categories
 exports.getIndex = function (req, res) {
-	res.render('post/index', {
-    title: 'Tất cả bài viết',
-    current: ['post', 'index']
-  });
+	Post.find({}).populate('category').exec(function (err, posts) {
+		if (err) {
+			console.log('err', err)
+			return done(err);
+		}
+		
+		res.render('post/index', {
+			title: 'Tất cả bài viết',
+			current: ['post', 'index'],
+			posts: posts
+		});
+	});
 };
 
 exports.getCreate = function (req, res) {
@@ -67,7 +75,7 @@ exports.postCreate = function (req, res) {
 			newPost.image = data.image;
 			newPost.description = data.description;
 			newPost.content = data.content;
-			newPost.categoryId = data.categoryId ? data.categoryId : null;
+			newPost.category = data.categoryId ? data.categoryId : null;
 			newPost.status = data.status;
 			newPost.isHot = data.isHot;
 			newPost.seo = {
@@ -85,7 +93,7 @@ exports.postCreate = function (req, res) {
 		
 					for( let i=0; i<tags.length; i++) {
 						var tagCheck = tags[i].trim();
-						Category.findOne({tagName: tagCheck}, function(err, tag){
+						Tag.findOne({tagName: tagCheck}, function(err, tag){
 							if (!err) {
 								if (tag) {
 									// case tag exist

@@ -1,17 +1,12 @@
 extends ../layout/main
 block stylesheets
-	link(rel='stylesheet', href='/stylesheets/jquery.dataTables-custom.css')
 	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
 block scripts
-	script(src='/javascripts/jquery.dataTables.min.js')
 	script(src='/javascripts/bootstrap-chosen.js')
 	script.
 		$(function() {
 		$('.chosen-select').chosen();
 		$('.chosen-select-deselect').chosen({ allow_single_deselect: true, disable_search: true });
-		$('#category-list').DataTable(
-
-		);
 		});
 block content
 	.row
@@ -23,7 +18,18 @@ block content
 					h5 #{title}
 				.user-actions
 					a.btn.btn-success(href='/category/create') Tạo mới
-				table#category-list.table.table-responsive.display(cellspacing='0', width='100%')
+					hr(style='border-top: 1px solid #d2d2d2')
+					form.form-horizontal(method='POST', action='/category/search')
+						.form-group
+							.col-lg-4
+								input#text1.form-control(type='text', name='categoryName', placeholder='Enter category name')
+							.col-lg-4
+								input#text2.form-control(type='text', name='categoryName', placeholder='Enter category name')
+							.col-lg-4
+								button.btn.btn-success(type='submit')
+									i.fa.fa-search
+									|  Search
+				table.table.table-striped.table-bordered.table-list
 					thead
 						tr
 							th.hidden-xs ID
@@ -53,7 +59,7 @@ block content
 								each child in cat.children
 									tr
 										td.hidden-xs #{i}
-										td.level-2 &nbsp;&nbsp;&nbsp;&nbsp;#{child.categoryName}
+										td.level-2 #{child.categoryName}
 											//- i.fa.fa-angle-right(aria-hidden='true')  #{child.categoryName}
 										td #{child.alias}
 										td.text-center
@@ -70,7 +76,7 @@ block content
 										each c in child.children
 											tr
 												td.hidden-xs #{i}
-												td.level-3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#{c.categoryName}
+												td.level-3 #{c.categoryName}
 													//- i.fa.fa-angle-right(aria-hidden='true')  #{c.categoryName}
 												td #{c.alias}
 												td.text-center
