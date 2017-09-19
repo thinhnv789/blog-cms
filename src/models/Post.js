@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 /**
  * Posts  Mongo DB model
- * @name categoryModel
+ * @name postModel
  */
 const postSchema = new mongoose.Schema({
     title: {type: String},
@@ -15,12 +15,13 @@ const postSchema = new mongoose.Schema({
     seo: {
         metaTitle: {type: String},
         metaDesc: {type: String},
-        metaKeyWord: {type: String}
+        metaKeyWords: {type: String}
     },
+    tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }],
     isHot: {type: Boolean},
     status: {type: Boolean},
 }, {timestamps: true});
 
-const Category = mongoose.model('Category', categorySchema);
+const Post = mongoose.model('Post', postSchema);
 
-module.exports = Category;
+module.exports = Post;

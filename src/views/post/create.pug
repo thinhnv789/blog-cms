@@ -1,92 +1,164 @@
 extends ../layout/main
 block stylesheets
-  link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
-  link(rel='stylesheet', href='/libs/froala-editor/css/froala_editor.pkgd.min.css')
-  link(rel='stylesheet', href='/libs/froala-editor/css/froala_style.min.css')
+	link(rel='stylesheet', href='/libs/froala-editor/css/froala_editor.pkgd.min.css')
+	link(rel='stylesheet', href='/libs/froala-editor/css/froala_style.min.css')
+	link(rel='stylesheet', href='/libs/cropperjs/dist/cropper.min.css')
+	link(rel='stylesheet', href='/libs/magnific-popup/dist/magnific-popup.css')
+	link(rel='stylesheet', href='/stylesheets/jquery-ui.min.css')
+	link(rel='stylesheet', href='/libs/jquery-tags-input/dist/jquery.tagsinput.min.css')
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+	link(rel='stylesheet', href='/stylesheets/my-cropper.css')
 block scripts
-  script(src='/javascripts/bootstrap-chosen.js')
-  script(src='/libs/froala-editor/js/froala_editor.pkgd.min.js')
-  script.
-    $(function() {
-    $('.chosen-select-deselect').chosen({ allow_single_deselect: true });
-    $('.chosen-status').chosen({ allow_single_deselect: true, disable_search: true });
-    });
-  script(type='text/javascript').
-    $('#post-content-editor').froalaEditor({
-    heightMin: 280,
-    // Button show xs
-    toolbarButtonsXS: ['bold', 'italic', 'underline', 'fontFamily', 'fontSize', '-', 'insertTable', 'insertImage', 'undo', 'redo'],
-    // Set the image upload URL.
-    imageUploadURL: '/media/upload_image',
-    // Load all images from folder
-    imageManagerLoadURL: '/media/load_images'
-    });
+	script(src='/libs/froala-editor/js/froala_editor.pkgd.min.js')
+	script(src='/libs/cropperjs/dist/cropper.min.js')
+	script(src='/libs/magnific-popup/dist/jquery.magnific-popup.min.js')
+	script(src='/javascripts/jquery-ui.min.js')
+	script(src='/libs/jquery-tags-input/dist/jquery.tagsinput.min.js')
+	script(src='/javascripts/bootstrap-chosen.js')
+	script(src='/javascripts/my-cropper.js')
+
+	script.
+		$(function() {
+		$('.chosen-select-deselect').chosen({ allow_single_deselect: true });
+		$('.chosen-status').chosen({ allow_single_deselect: true, disable_search: true });
+		});
+	script(type='text/javascript').
+		$('#post-content-editor').froalaEditor({
+		heightMin: 280,
+		// Button show xs
+		toolbarButtonsXS: ['bold', 'italic', 'underline', 'fontFamily', 'fontSize', '-', 'insertTable', 'insertImage', 'undo', 'redo'],
+		// Set the image upload URL.
+		imageUploadURL: '/media/upload_image',
+		// Load all images from folder
+		imageManagerLoadURL: '/media/load_images'
+		});
+	script(type='text/javascript').
+		$('#tags').tagsInput({
+			autocomplete_url:'http://localhost:3000/tag/list',
+			height:'68px',
+			width:'100%',
+		});
+	script(type='text/javascript').
+		var postCropper = new myCropper({ 
+			selector : '#post-image',
+			uploadDir: '/media/images/',
+			prefixFileName: 'post',
+			toolbars: [
+				'crop',
+				'zoomIn',
+				'zoomOut',
+				'rotateLeft',
+				'rotateRight',
+				'submitCrop'
+			]
+		});
 block content
-  .row
-    .col-lg-12
-      .box.dark
-        header
-          .icons
-            i.fa.fa-edit
-          h5 #{title}
-          // .toolbar
-          .toolbar
-            nav(style='padding: 8px;')
-              a.btn.btn-danger.btn-xs.close-box(href='javascript:;')
-                i.fa.fa-times
-          // /.toolbar
-        #div-1.body.collapse.in(aria-expanded='true', style='')
-        form.form-horizontal(method='POST', action='/post/create', style="padding: 0 15px;")
-          ul.nav.nav-tabs
-            li.active
-              a(data-toggle='tab', href='#post-content') Nội dung bài viết
-            li
-              a(data-toggle='tab', href='#seo') SEO
-          .tab-content
-            #post-content.tab-pane.in.active
-              h3 Thông tin chung
-              .form-group
-                .col-lg-6
-                  label.control-label(for='title') Tiêu đề
-                .col-lg-6
-                  label.control-label(for='categoryId') Danh mục
-                .col-lg-6
-                  input#categoryId.form-control(type='text', name='title', placeholder='Tiêu đề')  
-                .col-lg-6
-                  select.chosen-select-deselect(name='categoryId', data-placeholder='Select Category', style='width: 100%;')
-                    option(value=null)
-                    each cat in categories
-                      option(value=cat._id) #{cat.categoryName}
-                      if (cat.children.length > 0)
-                        each child in cat.children
-                          option(value=child._id) - #{child.categoryName}
-                          if (child.children.length > 0)
-                            each c in child.children
-                              option(value=c._id) -- #{c.categoryName}
-              .form-group
-                .col-lg-6
-                  label.control-label(for='image') Hình ảnh
-                  input.form-control(type='file', name='image')
-                .col-lg-6
-                  label.control-label(for='image') Mô tả
-                  textarea#description.form-control(name='description', rows="3")
-              .form-group
-                .col-lg-12
-                  label.control-label(for='image') Nội dung bài viết
-                  textarea#post-content-editor(name='content')
-              .form-group
-                .col-lg-6
-                  label.control-label(for='status') Status
-                .col-lg-6
-                  select.chosen-status(name='status', data-placeholder='Status', style='width: 100px;')
-                    option(value=1) Public
-                    option(value=2) Draft
-            #seo.tab-pane
-              h3 Thông tin SEO
-              .form-group 
-                .col-lg-6
-                  label.control-label(for='alias') Seo Url
-                  input#text1.form-control(type='text', name='alias', placeholder='Alias')
-          .form-group  
-              .col-lg-12
-                input#submit.btn.btn-success(type='submit', text='Submit')
+	.row
+		.col-lg-12
+			.box.dark
+				header
+					.icons
+						i.fa.fa-edit
+					h5 #{title}
+					// .toolbar
+					.toolbar
+						nav(style='padding: 8px;')
+							a.btn.btn-danger.btn-xs.close-box(href='javascript:;')
+								i.fa.fa-times
+					// /.toolbar
+				#div-1.body.collapse.in(aria-expanded='true', style='')
+				form.form-horizontal(method='POST', action='/post/create', style="padding: 0 15px;")
+					ul.nav.nav-tabs
+						li.active
+							a(data-toggle='tab', href='#post-content') Nội dung bài viết
+						li
+							a(data-toggle='tab', href='#seo') SEO
+					.tab-content
+						#post-content.tab-pane.in.active
+							h3 Thông tin chung
+							.form-group
+								.col-lg-6(class=errors && errors.title && 'has-error')
+									label.control-label(for='title') Tiêu đề
+									input#post-title.form-control(type='text', name='title', placeholder='Tiêu đề', value=data && data.title, onkeyup='genSlug($(this).val(), "#post-slug");') 
+									if errors && errors.title
+										.help-block #{errors.title.msg}
+								.col-lg-6(class=errors && errors.categoryId && 'has-error')
+									label.control-label(for='categoryId', style='display: block; text-align: left;') Danh mục
+									select.chosen-select-deselect(name='categoryId', data-placeholder='Select Category', style='width: 100%;')
+										option(value=null)
+										each cat in categories
+											option(value=cat._id, selected=(data && data.categoryId === cat._id.toString()) ? true : false) #{cat.categoryName}
+											if (cat.children.length > 0)
+												each child in cat.children
+													option(value=child._id, selected=(data && data.categoryId === child._id.toString()) ? true : false) - #{child.categoryName}
+													if (child.children.length > 0)
+														each c in child.children
+															option(value=c._id, selected=(data && data.categoryId === c._id.toString()) ? true : false) -- #{c.categoryName}
+									if errors && errors.categoryId
+										.help-block #{errors.categoryId.msg}
+							.form-group
+								.col-lg-6(class=errors && errors.image && 'has-error')
+									label.control-label(for='image') Hình ảnh
+									if data && data.image
+										label.custom-file-upload(for='post-image', style='display: none;')
+											i.fa.fa-cloud-upload
+										input#post-image.mycropper-browse-file(type='file', name='image', disabled=true)
+										input#imagefilename(type='hidden', name='image', value=data.image)
+										.images-preview
+											.preview-item
+												span.btn.btn-danger.btn-xs.remove-image
+													i.fa.fa-trash
+												img.image-cropped-preview(src='/media/images/' + data.image)
+									else
+										label.custom-file-upload(for='post-image')
+											i.fa.fa-cloud-upload
+										input#post-image.mycropper-browse-file(type='file', name='image')
+										//- input#post-image.form-control(type='file', name='image')
+									if errors && errors.image
+										.help-block #{errors.image.msg}
+								.col-lg-6(class=errors && errors.description && 'has-error')
+									label.control-label(for='image') Mô tả
+									textarea#description.form-control(name='description', rows="3") #{data && data.description}
+									if errors && errors.description
+										.help-block #{errors.description.msg}
+							.form-group
+								.col-lg-12(class=errors && errors.content && 'has-error')
+									label.control-label(for='image') Nội dung bài viết
+									textarea#post-content-editor(name='content') #{data && data.content}
+									if errors && errors.content
+										.help-block #{errors.content.msg}
+							.form-group
+								.col-lg-8
+									label.control-label(for='Tags') Tags
+									input#tags.form-control(name='tags', value=data && data.tags)
+							.form-group
+								.col-lg-6
+									label.control-label(for='status', style='display: block; text-align: left;') Status
+									select.form-control.chosen-status(name='status', data-placeholder='Status', style='width: 100px;')
+										option(value=1, selected=(data && data.status === 1) ? true : false) Public
+										option(value=0, selected=(data && data.status === 0) ? true : false) Draft
+								.col-lg-6
+									label.control-label(for='status') Set hot post
+									.checkbox
+										label
+											input(type='checkbox', name='isHot', value=1)
+											| Is Hot
+						#seo.tab-pane
+							h3 Thông tin SEO
+							.form-group 
+								.col-lg-6
+									label.control-label(for='alias') Seo Url
+									input#post-slug.form-control(type='text', name='alias', placeholder='Alias', value=data && data.alias)
+								.col-lg-6
+									label.control-label(for='seo') Seo Meta Title
+									input.form-control(type='text', name='metaTitle', placeholder='Meta Title', value=data && data.metaTitle)
+							.form-group 
+								.col-lg-6
+									label.control-label(for='seo') Seo Meta Desc
+									textarea.form-control(type='text', name='metaDesc', row='3', placeholder='Meta Description', value=data && data.metaDesc)
+								.col-lg-6
+									label.control-label(for='seo') Seo Meta Keywords
+									textarea.form-control(type='text', name='metaKeyWord', row='3', placeholder='Meta Keywords', value=data && data.metaKeyWord)
+					.form-group  
+							.col-lg-12
+								input#submit.btn.btn-success(type='submit', text='Submit')

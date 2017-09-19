@@ -24,3 +24,14 @@
   text-align: center;
   width: 32px;
 }
+.images-preview .preview-item {
+  width: 180px;
+  position: relative;
+}
+.images-preview .preview-item .remove-image {
+  position: absolute;
+  right: 0;
+}
+.image-cropped-preview {
+  max-width: 100%;
+}

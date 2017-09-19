@@ -24,16 +24,18 @@ block content
           // /.toolbar
         #div-1.body.collapse.in(aria-expanded='true', style='')
         form.form-horizontal(method='POST', action='/category/create', style="padding: 0 15px;")
-          .form-group
+          .form-group(class=errors && errors.categoryName && 'has-error')
             label.control-label.col-lg-4(for='text1') Category Name
             .col-lg-8
-              input#text1.form-control(type='text', name='categoryName', placeholder='Enter category name')
+              input#category-name.form-control(type='text', name='categoryName', placeholder='Enter category name', onkeyup='genSlug($(this).val(), "#category-slug");')
+              if errors && errors.categoryName
+                .help-block #{errors.categoryName.msg}
           .form-group
             label.control-label.col-lg-4(for='text1') Alias
             .col-lg-8
-              input#text1.form-control(type='text', name='alias', placeholder='Alias')  
+              input#category-slug.form-control(type='text', name='alias', placeholder='Alias')  
           .form-group
-            label.control-label.col-lg-4(for='text1') Parent Category
+            label.control-label.col-lg-4(for='text1', style='display: block; text-align: left;') Parent Category
             .col-lg-8
               select.chosen-select-deselect(name='parentId', data-placeholder='Select Parent', style='width: 100%;')
                 option(value=null)

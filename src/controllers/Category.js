@@ -43,39 +43,69 @@ exports.getCreate = function (req, res) {
 };
 
 exports.postCreate = function (req, res) {
-	var newCategory = new Category();
-	var mongoose = require('mongoose');
+	/*
+	* Validate create category
+	*/ 
+	req.checkBody('categoryName', 'Danh mục không được để trống').notEmpty();
 
-	newCategory.categoryName = req.body.categoryName;
-	newCategory.alias = req.body.alias;
-	newCategory.icon = '';
-	newCategory.parent = req.body.parentId ? req.body.parentId : null;
-	newCategory.status = req.body.status;
-	// save the user
-	newCategory.save(function (err) {
-		if (err) {
-			console.log('Error in Saving: ' + err);
-			res.send({ "result": false });
-		}
-		// Insert child to category
-		if (newCategory.parent) {
-			Category.findOne({ _id: newCategory.parent }, function (err, cat) {
-				if (!err) {
-					cat.children.push(newCategory._id);
-					cat.save(function (er) {
-						if (err) {
-							console.log('Error in Saving children: ' + err);
-							res.send({ "result": false });
-						} else {
-							res.redirect('/category');
-						}	
-					})
+	var errors = req.getValidationResult().then(function(errors) {
+		if (!errors.isEmpty()) {
+			var errors = errors.mapped();
+			//If there are errors render the form again, passing the previously entered values and errors
+			Category.find({parent: null}).populate('children').populate({
+				path: 'children',
+				populate: { path: 'children', model: Category }
+			}).exec(function (err, parents) {
+				if (err) {
+					console.log('err', err)
+					return done(err);
 				}
-			})
-		} else {
-			res.redirect('/category');
+				
+				res.render('category/create', {
+					title: 'Create New Category',
+					current: ['category', 'create'],
+					parents: parents,
+					errors: errors
+				});
+			});
+			return;
 		}
-		//res.redirect('/category/' + newCategory.type);
+
+	/*
+	* End validate
+	*/
+	var newCategory = new Category();
+	
+		newCategory.categoryName = req.body.categoryName;
+		newCategory.alias = req.body.alias;
+		newCategory.icon = '';
+		newCategory.parent = req.body.parentId ? req.body.parentId : null;
+		newCategory.status = req.body.status;
+		// save the user
+		newCategory.save(function (err) {
+			if (err) {
+				console.log('Error in Saving: ' + err);
+				res.send({ "result": false });
+			}
+			// Insert child to category
+			if (newCategory.parent) {
+				Category.findOne({ _id: newCategory.parent }, function (err, cat) {
+					if (!err) {
+						cat.children.push(newCategory._id);
+						cat.save(function (er) {
+							if (err) {
+								console.log('Error in Saving children: ' + err);
+								res.send({ "result": false });
+							} else {
+								res.redirect('/category');
+							}	
+						})
+					}
+				})
+			} else {
+				res.redirect('/category');
+			}
+		});
 	});
 };
 

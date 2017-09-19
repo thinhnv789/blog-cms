@@ -17,10 +17,6 @@ block content
 					h5 #{title}
 
 				input#choose-image(type='file', name='image', onchange='readURL(this);')
-				//- #cropped_result
-				//- |         // Cropped image to display (only if u want)
-				//- button#crop_button Crop
-				//- |  // Will trigger crop event
 
 				a.cropper-popup(href='#cropper-modal')
 				#cropper-modal.cropper-popup-block.mfp-hide

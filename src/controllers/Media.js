@@ -44,7 +44,23 @@ exports.postUploadImage = (req, res, next) => {
 	formidable = require('formidable'),
 	readChunk = require('read-chunk'),
 	fileType = require('file-type'),
-	form = new formidable.IncomingForm();
+	form = new formidable.IncomingForm(),
+	uploadDir = '/media/',
+	prefixFileName = 'image';
+
+	form.multiples = true;
+
+	form.on('field', function(name, value) {
+		switch (name) {
+			case 'uploadDir':
+				uploadDir = value;
+				break;
+			case 'prefixFileName':
+				prefixFileName = value;
+			default:
+				break;
+		}
+	});
 
 	// Invoked when a file has finished uploading.
 	form.on('file', function (name, file) {
@@ -60,12 +76,14 @@ exports.postUploadImage = (req, res, next) => {
 		// Check the file type, must be either png,jpg or jpeg
 		if (type !== null && (type.ext === 'png' || type.ext === 'jpg' || type.ext === 'jpeg')) {
 				// Assign new file name
-				filename = Date.now() + '-' + file.name + '.' + type.ext;
+				filename = prefixFileName + '-' + Date.now() + '.' + type.ext;
 				// Move the file with the new file name
-				fs.rename(file.path, path.join(__dirname, '/../../media/images/' + filename));
-				
+				fs.rename(file.path, path.join(__dirname, '/../..' + uploadDir + filename));
 				// Response 
-				res.status(200).end('/media/images/' + filename);
+				res.status(200).end(JSON.stringify({
+					path: uploadDir + filename,
+					fileName: filename
+				}));
 		}
 	});
 

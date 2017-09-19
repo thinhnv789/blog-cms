@@ -31,11 +31,11 @@
         span.link-title  Danh mục
         span.fa.arrow
       ul.collapse(aria-expanded='false', class=(Array.isArray(current) && current[0]=='category') && 'in')
-        li(class=(Array.isArray(current) && current[1]=='index') && 'current-route')
+        li(class=(Array.isArray(current) && current[0]=='category' && current[1]=='index') && 'current-route')
           a(href='/category')
             i.fa.fa-table
             |   Tất cả danh mục
-        li(class=(Array.isArray(current) && current[1]=='create') && 'current-route')
+        li(class=(Array.isArray(current) && current[0]=='category' && current[1]=='create') && 'current-route')
           a(href='/category/create')
             i.fa.fa-plus
             |   Thêm danh mục mới
@@ -45,11 +45,11 @@
         span.link-title  Bài viết
         span.fa.arrow
       ul.collapse(aria-expanded='false', class=(Array.isArray(current) && current[0]=='post') && 'in')
-        li(class=(Array.isArray(current) && current[1]=='index') && 'current-route')
+        li(class=(Array.isArray(current) && current[0]=='post' && current[1]=='index') && 'current-route')
           a(href='/post')
             i.fa.fa-table
             |   Tất cả bài viết
-        li(class=(Array.isArray(current) && current[1]=='create') && 'current-route')
+        li(class=(Array.isArray(current) && current[0]=='post' && current[1]=='create') && 'current-route')
           a(href='/post/create')
             i.fa.fa-plus
             |   Viết bài mới

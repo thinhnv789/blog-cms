@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var expressValidator = require('express-validator');
 var sass = require('node-sass');
 var sassMiddleware = require('node-sass-middleware');
 
@@ -16,6 +17,7 @@ var users = require('./src/routes/users');
 var media = require('./src/routes/media');
 var category = require('./src/routes/category');
 var post = require('./src/routes/post');
+var tag = require('./src/routes/tag');
 
 var app = express();
 
@@ -28,6 +30,7 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(expressValidator());
 app.use(cookieParser());
 
 // adding the sass middleware
@@ -49,6 +52,7 @@ app.use('/users', users);
 app.use('/media', media);
 app.use('/category', category);
 app.use('/post', post);
+app.use('/tag', tag);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
