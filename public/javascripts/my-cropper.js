@@ -49,57 +49,17 @@
       $(selector).change(function() {
         readURL(this);
       })
-    }
 
-    /**
-     * Event on input change
-     */
-    var readURL = function(input) {
-      console.log('read url');
-      if (input.files && input.files[0]) {
-          var reader = new FileReader();
-          reader.onload = function (e) {
-              $('#image-preview').attr('src', e.target.result)
-          };
-          reader.readAsDataURL(input.files[0]);
-          setTimeout(initCropper, 200);
-      }
-    }
-
-    var initCropper = function(){
-      var image = document.getElementById('image-preview');
-      var cropper = new Cropper(image, {
-      //   aspectRatio: 1 / 1,
-        viewMode: 1,
-        cropBoxResizable: false,
-        minContainerWidth: 600,
-        minContainerHeight: 400,
-        crop: function(e) {
-          console.log(e.detail.x);
-          console.log(e.detail.y);
-        }
-      });
-
-      cropper.setData({
-          width: 320,
-          height: 180
-      })
-
-      console.log('cropper', cropper);
-
-      // Show popup image crop
-      $('.cropper-popup').click();
-      console.log('cropper1', cropper);
       // On crop button clicked
       document.getElementById('submitCrop').addEventListener('click', function(){
-        console.log('cropper2', cropper)
-        var imgurl =  cropper.getCroppedCanvas().toDataURL();
+        console.log('cropper2', this.cropper)
+        var imgurl =  this.cropper.getCroppedCanvas().toDataURL();
         // var img = document.getElementById('image-preview');
         // img.src = imgurl;
         $('#image-preview').attr('src', imgurl)
         // document.getElementById("cropped_result").appendChild(img);
         /* ---------------- SEND IMAGE TO THE SERVER------------------------- */
-        cropper.getCroppedCanvas().toBlob(function (blob) {
+        this.cropper.getCroppedCanvas().toBlob(function (blob) {
           var formData = new FormData();
           formData.append('croppedImage', blob);
           formData.append('uploadDir', '/media/images/');
@@ -148,7 +108,7 @@
           });
         });
         /* ----------------------------------------------------*/
-      })
+      }.bind(this));
 
       $(document).on('click', '.remove-image', function() {
         console.log('remove');
@@ -158,11 +118,49 @@
         inputImgEl.remove();
         $('.custom-file-upload').show();
         $(config.selector).val('').attr('disabled', false);
-        cropper.destroy();
-        setTimeout(function(){
-          console.log('test', cropper);
-        }, 2000);
+      });
+    }
+
+    /**
+     * Event on input change
+     */
+    var readURL = function(input) {
+      console.log('read url');
+      if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+              $('#image-preview').attr('src', e.target.result)
+          };
+          reader.readAsDataURL(input.files[0]);
+          setTimeout(initCropper, 200);
+      }
+    }
+
+    var initCropper = function(){
+      var image = document.getElementById('image-preview');
+      // Destroy cropper before init
+      if (this.cropper) {
+        this.cropper.destroy();
+      }
+      this.cropper = new Cropper(image, {
+      //   aspectRatio: 1 / 1,
+        viewMode: 1,
+        cropBoxResizable: false,
+        minContainerWidth: 600,
+        minContainerHeight: 400,
+        crop: function(e) {
+          console.log(e.detail.x);
+          console.log(e.detail.y);
+        }
+      });
+
+      this.cropper.setData({
+          width: 320,
+          height: 180
       })
+
+      // Show popup image crop
+      $('.cropper-popup').click();
     }
 
     /*
