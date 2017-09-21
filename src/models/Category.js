@@ -7,7 +7,6 @@ var mongoose = require('mongoose');
 const categorySchema = new mongoose.Schema({
     categoryName: {type: String},
     alias: {type: String},
-    // parentId: mongoose.Schema.ObjectId,
     parent: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
     children: [{type: mongoose.Schema.Types.ObjectId, ref: 'Category'}],
     icon: {type: String},

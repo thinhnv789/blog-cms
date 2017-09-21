@@ -238,11 +238,13 @@ html {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    position: relative
+    position: relative;
+    width: 100px;
 }
 
 .user-media .user-link .user-img {
-    margin: 10px auto
+    margin: 10px auto;
+    width: 75px;
 }
 
 .user-media .user-link .user-label {
@@ -267,7 +269,8 @@ html {
 .user-media .media-body {
     display: block;
     float: left;
-    margin-left: 12px
+    margin-left: 12px;
+    width: calc(100% - 120px);
 }
 
 .user-media .media-body h5.media-heading {
@@ -278,6 +281,12 @@ html {
 
 .user-media .media-body ul.user-info li {
     color: #ccc
+}
+
+.user-media .media-body ul.user-info li.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .user-media:before,

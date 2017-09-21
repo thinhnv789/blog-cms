@@ -65,6 +65,7 @@ exports.postCreate = function (req, res) {
 					title: 'Create New Category',
 					current: ['category', 'create'],
 					parents: parents,
+					data: req.body,
 					errors: errors
 				});
 			});

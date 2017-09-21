@@ -4,13 +4,13 @@
       span.fa.fa-user
     .user-wrapper.bg-dark
       a.user-link(href='')
-        img.media-object.img-thumbnail.user-img(alt='User Picture', src='assets/img/user.gif')
+        img.media-object.img-thumbnail.user-img(alt='User Picture', src='/images/default-user.png')
         span.label.label-danger.user-label 16
       .media-body
         h5.media-heading Archie
         ul.list-unstyled.user-info
-          li
-            a(href='') Administrator
+          li.ellipsis
+            a(href='') #{user ? user.email : 'Administrator'}
           li
             | Last Access :
             br
@@ -19,12 +19,13 @@
               |  16 Mar 16:32
   // #menu
   ul#menu.bg-dark.dker
-    li.nav-header Menu
+    li.nav-header.text-center cms
     li.nav-divider
     li
       a(href='dashboard.html')
         i.fa.fa-dashboard
         span.link-title  Dashboard
+    li.nav-divider
     li.menu-dropdown(class=(Array.isArray(current) && current[0]=='category') && 'active')
       a(href='javascript:void(0);')
         i.fa.fa-folder-open-o
@@ -33,7 +34,7 @@
       ul.collapse(aria-expanded='false', class=(Array.isArray(current) && current[0]=='category') && 'in')
         li(class=(Array.isArray(current) && current[0]=='category' && current[1]=='index') && 'current-route')
           a(href='/category')
-            i.fa.fa-table
+            i.fa.fa-list
             |   Tất cả danh mục
         li(class=(Array.isArray(current) && current[0]=='category' && current[1]=='create') && 'current-route')
           a(href='/category/create')
@@ -47,74 +48,40 @@
       ul.collapse(aria-expanded='false', class=(Array.isArray(current) && current[0]=='post') && 'in')
         li(class=(Array.isArray(current) && current[0]=='post' && current[1]=='index') && 'current-route')
           a(href='/post')
-            i.fa.fa-table
+            i.fa.fa-list
             |   Tất cả bài viết
         li(class=(Array.isArray(current) && current[0]=='post' && current[1]=='create') && 'current-route')
           a(href='/post/create')
             i.fa.fa-plus
             |   Viết bài mới
+    li.menu-dropdown(class=(Array.isArray(current) && current[0]=='product') && 'active')
+      a(href='javascript:void(0);')
+        i.fa.fa-product-hunt
+        span.link-title  Sản phẩm
+        span.fa.arrow
+      ul.collapse(aria-expanded='false', class=(Array.isArray(current) && current[0]=='product') && 'in')
+        li(class=(Array.isArray(current) && current[0]=='product' && current[1]=='index') && 'current-route')
+          a(href='/product')
+            i.fa.fa-list
+            |   Danh sách sản phẩm
+        li(class=(Array.isArray(current) && current[0]=='product' && current[1]=='create') && 'current-route')
+          a(href='/product/create')
+            i.fa.fa-plus
+            |   Thêm sản phẩm mới
     li.nav-divider
-    li.menu-dropdown
-            a(href='javascript:;')
-              i.fa.fa-code
-              span.link-title
-                | Unlimited Level Menu
-              span.fa.arrow
-            ul.collapse
-              li
-                a(href='javascript:;')
-                  | Level 1  
-                  span.fa.arrow
-                ul.collapse
-                  li
-                    a(href='javascript:;') Level 2
-                  li
-                    a(href='javascript:;') Level 2
-                  li
-                    a(href='javascript:;')
-                      | Level 2  
-                      span.fa.arrow
-                    ul.collapse
-                      li
-                        a(href='javascript:;') Level 3
-                      li
-                        a(href='javascript:;') Level 3
-                      li
-                        a(href='javascript:;')
-                          | Level 3  
-                          span.fa.arrow
-                        ul.collapse
-                          li
-                            a(href='javascript:;') Level 4
-                          li
-                            a(href='javascript:;') Level 4
-                          li
-                            a(href='javascript:;')
-                              | Level 4  
-                              span.fa.arrow
-                            ul.collapse
-                              li
-                                a(href='javascript:;') Level 5
-                              li
-                                a(href='javascript:;') Level 5
-                              li
-                                a(href='javascript:;') Level 5
-                      li
-                        a(href='javascript:;') Level 4
-                  li
-                    a(href='javascript:;') Level 2
-              li
-                a(href='javascript:;') Level 1
-              li
-                a(href='javascript:;')
-                  | Level 1  
-                  span.fa.arrow
-                ul.collapse
-                  li
-                    a(href='javascript:;') Level 2
-                  li
-                    a(href='javascript:;') Level 2
-                  li
-                    a(href='javascript:;') Level 2
+    li.menu-dropdown(class=(Array.isArray(current) && current[0]=='user') && 'active')
+      a(href='javascript:void(0);')
+        i.fa.fa-user-o
+        span.link-title  Tài khoản
+        span.fa.arrow
+      ul.collapse(aria-expanded='false', class=(Array.isArray(current) && current[0]=='user') && 'in')
+        li(class=(Array.isArray(current) && current[0]=='user' && current[1]=='index') && 'current-route')
+          a(href='/user')
+            i.fa.fa-list
+            |   Danh sách tài khoản
+        li(class=(Array.isArray(current) && current[0]=='user' && current[1]=='create') && 'current-route')
+          a(href='/user/create')
+            i.fa.fa-plus
+            |   Tạo tài khoản mới
   // /#menu
 // /#left

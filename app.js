@@ -7,17 +7,27 @@ var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var sass = require('node-sass');
 var sassMiddleware = require('node-sass-middleware');
+var passport = require('passport');
+var session = require('express-session');
+var flash = require('express-flash');
+const MongoStore = require('connect-mongo')(session);
 
 // Configuration
 var dbConfig = require('./src/config/dbConfig.json');
 var Database = require('./src/config/dbconnection');
 
 var index = require('./src/routes/index');
-var users = require('./src/routes/users');
+var user = require('./src/routes/user');
+var role = require('./src/routes/role');
 var media = require('./src/routes/media');
 var category = require('./src/routes/category');
 var post = require('./src/routes/post');
 var tag = require('./src/routes/tag');
+
+/**
+ * API keys and Passport configuration.
+ */
+const passportConfig = require('./src/config/passport');
 
 var app = express();
 
@@ -41,14 +51,40 @@ app.use(
     debug: true, 
     outputStyle: 'compressed'
   })
-);   
+);
+
+// Use session
+app.use(session({
+  resave: true,
+  saveUninitialized: true,
+  secret: 'cms2017',
+  store: new MongoStore({
+    url: dbConfig.mongodb.address,
+    autoReconnect: true,
+    clear_interval: 3600
+  })
+}));
+
+// Use passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// User flash data
+app.use(flash());
+
+// Pass user login to client
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  next();
+});
 
 app.use('/libs', express.static(__dirname + '/node_modules/'));
 app.use('/media', express.static(__dirname + '/media/'));
 app.use(express.static(path.join(__dirname, '/public')));
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/user', user);
+app.use('/role', role);
 app.use('/media', media);
 app.use('/category', category);
 app.use('/post', post);

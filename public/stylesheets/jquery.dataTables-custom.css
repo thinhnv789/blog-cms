@@ -77,6 +77,13 @@ table.dataTable thead tr th.sorting::after, table.dataTable thead tr th.sorting_
   float: right;
   margin-right: 5px;
 }
+table.dataTable thead tr th.no-sort {
+  pointer-events: none;
+  cursor: default;
+}
+table.dataTable thead tr th.no-sort::after {
+  display: none !important;
+}
 table.dataTable thead tr th.sorting::after {
   content: "\f0dc";
 }
