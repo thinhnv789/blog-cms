@@ -14,7 +14,7 @@ exports.postFroalaUploadImage = (req, res, next) => {
 
 // Get all images from folder
 exports.getFroalaLoadImages = (req, res, next) => {
-	const imageFolder = './media/images/store';
+	const imageFolder = './media/images/store/';
 	const fs = require('fs');
 
 	let data = [];

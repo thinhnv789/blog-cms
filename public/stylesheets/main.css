@@ -146,7 +146,7 @@
     margin: auto;
 }
 
-input[type="file"] {
+input.mycropper-browse-file[type="file"] {
     display: none;
 }
 .custom-file-upload {
