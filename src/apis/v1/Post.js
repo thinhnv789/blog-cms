@@ -28,6 +28,9 @@ exports.getIndex = function (req, res) {
 			console.log('err', err)
 			return done(err);
 		}
-		res.send(posts);
+		res.send({
+			code: 0,
+			data: posts
+		});
 	});
 };
