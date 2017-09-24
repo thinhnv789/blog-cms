@@ -1,12 +1,19 @@
 extends ./layout/main
 block stylesheets
-  link(rel='stylesheet', href='/libs/froala-editor/css/froala_editor.pkgd.min.css')
-  link(rel='stylesheet', href='/libs/froala-editor/css/froala_style.min.css')
+	link(rel='stylesheet', href='/stylesheets/froala_editor.min.css')
 block content
-  h1= title
-  p Welcome to #{title} abc
-  textarea#test-editor
+	h1= title
+	p Welcome to #{title} abc
+	textarea#test-editor
 block scripts
-  script(src='/javascripts/froala-editor.js')
-  script(src='/javascripts/editor-config.js')
-  
+	script(src='/javascripts/froala_editor.min.js')
+	script(type='text/javascript').
+		$('#test-editor').froalaEditor({
+		heightMin: 280,
+		// Button show xs
+		toolbarButtonsXS: ['bold', 'italic', 'underline', 'fontFamily', 'fontSize', '-', 'insertTable', 'insertImage', 'undo', 'redo'],
+		// Set the image upload URL.
+		imageUploadURL: '/media/upload_image',
+		// Load all images from folder
+		imageManagerLoadURL: '/media/load_images'
+		});
