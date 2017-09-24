@@ -81,6 +81,8 @@ app.use(flash());
 // Pass user login to client
 app.use((req, res, next) => {
   res.locals.user = req.user;
+   // Website you wish to allow to connect
+   res.setHeader('Access-Control-Allow-Origin', '*');
   next();
 });
 
@@ -100,7 +102,11 @@ app.use('/tag', tag);
 /**
  * Using router api/v1/...
  */
-app.use('/api/v1', apiv1);
+app.use('/api/v1', apiv1, function(req, res, next) {
+   // Website you wish to allow to connect
+   res.setHeader('Access-Control-Allow-Origin', '*');
+   next();
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
