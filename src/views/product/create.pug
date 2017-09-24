@@ -23,7 +23,7 @@ block scripts
 		$('.chosen-status').chosen({ allow_single_deselect: true, disable_search: true });
 		});
 	script(type='text/javascript').
-		$('#post-content-editor').froalaEditor({
+		$('#productInfo-editor, #product-instruction').froalaEditor({
 		heightMin: 280,
 		// Button show xs
 		toolbarButtonsXS: ['bold', 'italic', 'underline', 'fontFamily', 'fontSize', '-', 'insertTable', 'insertImage', 'undo', 'redo'],
@@ -33,16 +33,11 @@ block scripts
 		imageManagerLoadURL: '/media/load_images'
 		});
 	script(type='text/javascript').
-		$('#tags').tagsInput({
-			autocomplete_url:'http://localhost:3000/tag/list',
-			height:'68px',
-			width:'100%',
-		});
-	script(type='text/javascript').
-		var postCropper = new myCropper({ 
-			selector : '#post-image',
-			uploadDir: '/media/images/post/',
-			prefixFileName: 'dac-san',
+		var productCropper = new myCropper({ 
+			selector : '#product-image',
+			uploadDir: '/media/images/',
+			prefixFileName: 'product',
+			multiple: true,
 			toolbars: [
 				'crop',
 				'zoomIn',
@@ -52,12 +47,15 @@ block scripts
 				'submitCrop'
 			],
 			clientOptions: {
-				aspectRatio: 16 / 9,
+				aspectRatio: 4 / 3,
 				viewMode: 1,
 				cropBoxResizable: false,
 				minContainerWidth: 600,
 				minContainerHeight: 400,
 			}
+		});
+		$('#product-form').submit(function(){
+			$('#product-image').remove();
 		});
 block content
 	.row
@@ -65,7 +63,7 @@ block content
 			.box.dark
 				header
 					.icons
-						i.fa.fa-edit
+						i.fa.fa-plus
 					h5 #{title}
 					// .toolbar
 					.toolbar
@@ -74,21 +72,23 @@ block content
 								i.fa.fa-times
 					// /.toolbar
 				#div-1.body.collapse.in(aria-expanded='true', style='')
-				form.form-horizontal(method='POST', action='/post/create', style="padding: 0 15px;")
+				form#product-form.form-horizontal(method='POST', action='/product/create', style="padding: 0 15px;")
 					ul.nav.nav-tabs
 						li.active
-							a(data-toggle='tab', href='#post-content') Nội dung bài viết
+							a(data-toggle='tab', href='#product-content') Thông tin chính
+						li
+							a(data-toggle='tab', href='#detail') Chi tiết
 						li
 							a(data-toggle='tab', href='#seo') SEO
 					.tab-content
-						#post-content.tab-pane.in.active
+						#product-content.tab-pane.in.active
 							h3 Thông tin chung
 							.form-group
-								.col-lg-6(class=errors && errors.title && 'has-error')
-									label.control-label(for='title') Tiêu đề
-									input#post-title.form-control(type='text', name='title', placeholder='Tiêu đề', value=data && data.title, onkeyup='genSlug($(this).val(), "#post-slug");') 
-									if errors && errors.title
-										.help-block #{errors.title.msg}
+								.col-lg-6(class=errors && errors.productName && 'has-error')
+									label.control-label(for='productName') Tên sản phẩm
+									input#product-name.form-control(type='text', name='productName', placeholder='Tên sản phẩm', value=data && data.productName, onkeyup='genSlug($(this).val(), "#product-slug");') 
+									if errors && errors.productName
+										.help-block #{errors.productName.msg}
 								.col-lg-6(class=errors && errors.categoryId && 'has-error')
 									label.control-label(for='categoryId', style='display: block; text-align: left;') Danh mục
 									select.chosen-select-deselect(name='categoryId', data-placeholder='Select Category', style='width: 100%;')
@@ -107,37 +107,35 @@ block content
 								.col-lg-6(class=errors && errors.image && 'has-error')
 									label.control-label(for='image') Hình ảnh
 									if data && data.image
-										label.custom-file-upload(for='post-image', style='display: none;')
+										label.custom-file-upload(for='product-image', style='display: none;')
 											i.fa.fa-cloud-upload
-										input#post-image.mycropper-browse-file(type='file', name='image', disabled=true)
+										input#product-image.mycropper-browse-file(type='file', name='image', disabled=true)
 										input#imagefilename(type='hidden', name='image', value=data.image)
 										.images-preview
-											.preview-item
-												span.btn.btn-danger.btn-xs.remove-image
-													i.fa.fa-trash
-												img.image-cropped-preview(src='/media/images/' + data.image)
+											- var images = data.image.split(',')
+											for img in images
+												.preview-item
+													span.btn.btn-danger.btn-xs.remove-image
+														i.fa.fa-trash
+													img.image-cropped-preview(src='/media/images/' + img)
 									else
-										label.custom-file-upload(for='post-image')
+										label.custom-file-upload(for='product-image')
 											i.fa.fa-cloud-upload
-										input#post-image.mycropper-browse-file(type='file', name='image')
+										input#product-image.mycropper-browse-file(type='file', name='image')
 										//- input#post-image.form-control(type='file', name='image')
 									if errors && errors.image
 										.help-block #{errors.image.msg}
 								.col-lg-6(class=errors && errors.description && 'has-error')
-									label.control-label(for='image') Mô tả
+									label.control-label(for='image') Mô tả ngắn gọn
 									textarea#description.form-control(name='description', rows="3") #{data && data.description}
 									if errors && errors.description
 										.help-block #{errors.description.msg}
 							.form-group
-								.col-lg-12(class=errors && errors.content && 'has-error')
-									label.control-label(for='image') Nội dung bài viết
-									textarea#post-content-editor(name='content') #{data && data.content}
-									if errors && errors.content
-										.help-block #{errors.content.msg}
-							.form-group
-								.col-lg-8
-									label.control-label(for='Tags') Tags
-									input#tags.form-control(name='tags', value=data && data.tags)
+								.col-lg-12(class=errors && errors.productInfo && 'has-error')
+									label.control-label(for='productInfo') Thông tin về sản phẩm
+									textarea#productInfo-editor(name='productInfo') #{data && data.productInfo}
+									if errors && errors.productInfo
+										.help-block #{errors.productInfo.msg}
 							.form-group
 								.col-lg-6
 									label.control-label(for='status', style='display: block; text-align: left;') Status
@@ -145,17 +143,34 @@ block content
 										option(value=1, selected=(data && data.status === 1) ? true : false) Public
 										option(value=0, selected=(data && data.status === 0) ? true : false) Draft
 								.col-lg-6
-									label.control-label(for='status') Set hot post
+									label.control-label(for='isBestSeller') Sản phẩm bán chạy
 									.checkbox
 										label
-											input(type='checkbox', name='isHot', value=1)
-											| Is Hot
+											input(type='checkbox', name='isBestSeller', value=1)
+											| Bán chạy
+						#detail.tab-pane
+							h3 Chi tiết sản phẩm
+							.form-group 
+								.col-lg-6
+									label.control-label(for='alias') Giá
+									input#product-price.form-control(type='number', step='0.01', name='price', placeholder='Price', value=data && data.price)
+								.col-lg-6
+									label.control-label(for='old price') Giá cũ
+									input.form-control(type='number', step='0.01', name='oldPrice', placeholder='Old Price', value=data && data.oldPrice)
+							.form-group 
+								.col-lg-12
+									label.control-label(for='instruction') Hướng dẫn sử dụng
+									textarea#product-instruction.form-control(type='text', name='instruction', value=data && data.instruction)
+							.form-group
+								.col-lg-6
+									label.control-label(for='madeIn') Xuất xứ
+									input.form-control(type='text', name='madeIn', row='3', placeholder='Xuất xứ sản phẩm', value=data && data.madeIn)
 						#seo.tab-pane
 							h3 Thông tin SEO
 							.form-group 
 								.col-lg-6
 									label.control-label(for='alias') Seo Url
-									input#post-slug.form-control(type='text', name='alias', placeholder='Alias', value=data && data.alias)
+									input#product-slug.form-control(type='text', name='alias', placeholder='Alias', value=data && data.alias)
 								.col-lg-6
 									label.control-label(for='seo') Seo Meta Title
 									input.form-control(type='text', name='metaTitle', placeholder='Meta Title', value=data && data.metaTitle)

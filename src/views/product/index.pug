@@ -8,10 +8,7 @@ block scripts
 	script.
 		$(function() {
 		$('.chosen-select').chosen();
-		$('.chosen-select-deselect').chosen({ allow_single_deselect: true, disable_search: true });
-		$('#post-list').DataTable(
-
-		);
+		$('#product-list').DataTable();
 		});
 block content
 	.row
@@ -22,29 +19,29 @@ block content
 						i.fa.fa-table
 					h5 #{title}
 				.user-actions
-					a.btn.btn-success(href='/post/create') Tạo mới
-				table#post-list.table.table-responsive.display(cellspacing='0', width='100%')
+					a.btn.btn-success(href='/product/create') Tạo mới
+				table#product-list.table.table-responsive.display(cellspacing='0', width='100%')
 					thead
 						tr
 							th.hidden-xs ID
-							th Tiêu đề
+							th Tên sản phẩm
 							th Hình ảnh
 							th Danh mục
+							th.text-center Giá
 							th.text-center Trạng thái
-							th.text-center Is Hot
 							th.text-center.no-sort
 								em.fa.fa-cog
 					tbody
 						- var i = 1;
-						each post in posts
+						each product in products
 							tr
 								td.hidden-xs #{i}
-								td #{post.title}
+								td #{product.productName}
 								td
-									img.img-responsive(src='/media/images/post/' + post.image, style='width: 128px;')
-								td #{post.category.categoryName}
-								td.text-center #{post.status ? 'Public' : 'Draft'}
-								td.text-center #{post.isHot}
+									img.img-responsive(src='/media/images/' + product.image.split(',')[0], style='width: 128px;')
+								td #{product.category.categoryName}
+								td.text-center #{product.price}
+								td.text-center #{product.status ? 'Public' : 'Draft'}
 								td(align='center')
 									a.btn.btn-default
 										em.fa.fa-pencil

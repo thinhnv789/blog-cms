@@ -22,7 +22,13 @@ var role = require('./src/routes/role');
 var media = require('./src/routes/media');
 var category = require('./src/routes/category');
 var post = require('./src/routes/post');
+var product = require('./src/routes/product');
 var tag = require('./src/routes/tag');
+
+/**
+ * Api for frontend
+ */
+var apiv1 = require('./src/routes/apis/v1');
 
 /**
  * API keys and Passport configuration.
@@ -88,7 +94,13 @@ app.use('/role', role);
 app.use('/media', media);
 app.use('/category', category);
 app.use('/post', post);
+app.use('/product', product);
 app.use('/tag', tag);
+
+/**
+ * Using router api/v1/...
+ */
+app.use('/api/v1', apiv1);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

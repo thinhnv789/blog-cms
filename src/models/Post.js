@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+const systemConfig = require('./../config/system.json');
 
 /**
  * Posts  Mongo DB model
@@ -19,8 +20,18 @@ const postSchema = new mongoose.Schema({
     },
     tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }],
     isHot: {type: Boolean},
+    views: {type: Number},
     status: {type: Boolean},
+    createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 }, {timestamps: true});
+
+postSchema.set('toJSON', {
+    virtuals: true
+});
+// Get full image url with media config
+postSchema.virtual('imageUrl').get(function () {
+    return systemConfig.mediaUrl + '/' + this.image;
+});
 
 const Post = mongoose.model('Post', postSchema);
 

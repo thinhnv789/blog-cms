@@ -2,7 +2,7 @@ var Category = require('../models/Category');
 var Post = require('../models/Post');
 var Tag = require('../models/Tag');
 
-// Get all Categories
+// Get all posts
 exports.getIndex = function (req, res) {
 	Post.find({}).populate('category').exec(function (err, posts) {
 		if (err) {

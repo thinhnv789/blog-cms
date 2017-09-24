@@ -24,7 +24,7 @@
 14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:230:5)
 15 verbose pkgid blog-cms@0.0.0
 16 verbose cwd /var/www/nodejs/blog-cms
-17 error Linux 3.13.0-129-generic
+17 error Linux 3.13.0-132-generic
 18 error argv "/usr/bin/node" "/usr/bin/npm" "start"
 19 error node v6.11.3
 20 error npm  v3.10.10

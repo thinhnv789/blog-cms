@@ -23,6 +23,7 @@
     this.construct = function(options){
         $.extend(config , options);
         initHtml(config.selector);
+        console.log('config', config);
     };
 
     /*
@@ -62,8 +63,9 @@
         this.cropper.getCroppedCanvas().toBlob(function (blob) {
           var formData = new FormData();
           formData.append('croppedImage', blob);
-          formData.append('uploadDir', '/media/images/');
-          formData.append('prefixFileName', 'post');
+          formData.append('uploadDir', config.uploadDir);
+          console.log('prefix filename', config.prefixFileName);
+          formData.append('prefixFileName', config.prefixFileName);
           // Use `jQuery.ajax` method
           $.ajax('/media/upload-image', {
             method: "POST",
@@ -76,30 +78,40 @@
               console.log('res', res);
               // Image preview item
               var imageCropped = '<div class="preview-item">';
-              imageCropped += '<span class="btn btn-danger btn-xs remove-image"><i class="fa fa-trash"></i></span>';
+              imageCropped += '<span class="btn btn-danger btn-xs remove-image" filename='+ res.fileName +'><i class="fa fa-trash"></i></span>';
               imageCropped += '<img class="image-cropped-preview" src="' + res.path + '"/>';
               imageCropped += '</div>';
               // All images preview
-              var imagePreview = '<div class="images-preview">';
-              imagePreview += imageCropped;
-              imagePreview += '</div>';
-              $(config.selector).attr('disabled', true);//.val(res.fileName);
+              var imagesPreview = document.getElementById('images-preview');
+              if (imagesPreview) {
+                imagesPreview.innerHTML += imageCropped;
+              } else {
+                imagePreview = '<div id="images-preview" class="images-preview">';
+                imagePreview += imageCropped;
+                imagePreview += '</div>';
+                // Insert image preview after input
+                $(imagePreview).insertAfter( $(config.selector) );
+              }
+
               // Add input value filename in order to post form
               var ipName = $(config.selector).attr('name');
               var inputImgEl = document.getElementById(ipName + 'filename');
               if (inputImgEl) {
-                console.log('exist', inputImgEl);
+                var inputImgVal = inputImgEl.value;
+                inputImgVal += ',' + res.fileName;
+                inputImgEl.value = inputImgVal;
               } else {
                 console.log('not exits');
                 inputImgEl = '<input type="hidden" id="' + ipName + 'filename' + '" name="' + ipName + '" value="' + res.fileName + '">';
               }
-              // Insert image preview after input
-              $(imagePreview).insertAfter( $(config.selector) );
               // Insert input with filename after input file
               $(inputImgEl).insertAfter( $(config.selector) );
               // Hide label browse image
-              $(config.selector).prev().hide();
-              $(config.selector).hide();
+              if (!config.multiple) {
+                $(config.selector).attr('disabled', true);
+                $(config.selector).prev().hide();
+                $(config.selector).hide();
+              }
               $.magnificPopup.close();
             },
             error: function () {
@@ -111,11 +123,19 @@
       }.bind(this));
 
       $(document).on('click', '.remove-image', function() {
-        console.log('remove');
         $(this).parent().remove();
+        var fileDelete = $(this).attr('filename');
         var ipName = $(config.selector).attr('name');
         var inputImgEl = document.getElementById(ipName + 'filename');
-        inputImgEl.remove();
+        if (!config.multiple) {
+          inputImgEl.remove();
+        } else {
+          var inputImgVal = inputImgEl.value, i, newVal=[];
+          inputImgVal = inputImgVal.replace(','+fileDelete, '');
+          inputImgVal = inputImgVal.replace(','+fileDelete + ',', '');
+          inputImgVal = inputImgVal.replace(fileDelete, '');
+          inputImgEl.value = inputImgVal;
+        }
         $('.custom-file-upload').show();
         $(config.selector).val('').attr('disabled', false);
       });
@@ -142,22 +162,12 @@
       if (this.cropper) {
         this.cropper.destroy();
       }
-      this.cropper = new Cropper(image, {
-      //   aspectRatio: 1 / 1,
-        viewMode: 1,
-        cropBoxResizable: false,
-        minContainerWidth: 600,
-        minContainerHeight: 400,
-        crop: function(e) {
-          console.log(e.detail.x);
-          console.log(e.detail.y);
-        }
-      });
+      this.cropper = new Cropper(image, config.clientOptions);
 
-      this.cropper.setData({
-          width: 320,
-          height: 180
-      })
+      // this.cropper.setData({
+      //     width: 250,
+      //     height: 140
+      // })
 
       // Show popup image crop
       $('.cropper-popup').click();

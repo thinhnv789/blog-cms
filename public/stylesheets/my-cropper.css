@@ -27,6 +27,8 @@
 .images-preview .preview-item {
   width: 180px;
   position: relative;
+  display: inline-block;
+  margin-right: 15px;
 }
 .images-preview .preview-item .remove-image {
   position: absolute;

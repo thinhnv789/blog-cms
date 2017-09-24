@@ -2,7 +2,7 @@
 exports.postFroalaUploadImage = (req, res, next) => {
 	var FroalaEditor = require('wysiwyg-editor-node-sdk/lib/froalaEditor.js');
 	// Store image.
-  FroalaEditor.Image.upload(req, '../media/images/', function(err, data) {
+  FroalaEditor.Image.upload(req, '../media/images/store/', function(err, data) {
     // Return data.
     if (err) {
       return res.send(JSON.stringify(err));
@@ -14,7 +14,7 @@ exports.postFroalaUploadImage = (req, res, next) => {
 
 // Get all images from folder
 exports.getFroalaLoadImages = (req, res, next) => {
-	const imageFolder = './media/images/';
+	const imageFolder = './media/images/store';
 	const fs = require('fs');
 
 	let data = [];
