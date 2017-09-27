@@ -24,6 +24,7 @@ var category = require('./src/routes/category');
 var post = require('./src/routes/post');
 var product = require('./src/routes/product');
 var tag = require('./src/routes/tag');
+var slider = require('./src/routes/slider');
 
 /**
  * Api for frontend
@@ -99,6 +100,7 @@ app.use('/category', category);
 app.use('/post', post);
 app.use('/product', product);
 app.use('/tag', tag);
+app.use('/slider', slider);
 
 /**
  * Using router api/v1/...

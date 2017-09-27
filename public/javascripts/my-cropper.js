@@ -64,8 +64,9 @@
           var formData = new FormData();
           formData.append('croppedImage', blob);
           formData.append('uploadDir', config.uploadDir);
-          console.log('prefix filename', config.prefixFileName);
           formData.append('prefixFileName', config.prefixFileName);
+          formData.append('thumbWidth', config.thumbWidth);
+          formData.append('thumbHeight', config.thumbHeight);
           // Use `jQuery.ajax` method
           $.ajax('/media/upload-image', {
             method: "POST",
@@ -164,7 +165,7 @@
       }
       this.cropper = new Cropper(image, config.clientOptions);
 
-      // this.cropper.setData({
+      // this.cropper.setCropBoxData({
       //     width: 250,
       //     height: 140
       // })

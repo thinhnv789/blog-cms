@@ -44,9 +44,12 @@ exports.postUploadImage = (req, res, next) => {
 	formidable = require('formidable'),
 	readChunk = require('read-chunk'),
 	fileType = require('file-type'),
+	sharp = require('sharp'),
 	form = new formidable.IncomingForm(),
 	uploadDir = '/media/',
-	prefixFileName = 'image';
+	prefixFileName = 'image',
+	thumbWidth = 100,
+	thumbHeight = 100;;
 
 	form.multiples = true;
 
@@ -57,6 +60,12 @@ exports.postUploadImage = (req, res, next) => {
 				break;
 			case 'prefixFileName':
 				prefixFileName = value;
+			case 'thumbWidth':
+				thumbWidth = Math.round(value);
+				break;
+			case 'thumbHeight':
+				thumbHeight = Math.round(value);
+				break;
 			default:
 				break;
 		}
@@ -77,13 +86,17 @@ exports.postUploadImage = (req, res, next) => {
 		if (type !== null && (type.ext === 'png' || type.ext === 'jpg' || type.ext === 'jpeg')) {
 				// Assign new file name
 				filename = prefixFileName + '-' + Date.now() + '.' + type.ext;
-				// Move the file with the new file name
-				fs.rename(file.path, path.join(__dirname, '/../..' + uploadDir + filename));
-				// Response 
-				res.status(200).end(JSON.stringify({
-					path: uploadDir + filename,
-					fileName: filename
-				}));
+
+				// Upload origin image
+				sharp(file.path).toFile(path.join(__dirname, '/../..' + uploadDir + 'origin/' + filename), (err, info) => {});
+				// Upload thumb image
+				sharp(file.path).resize(thumbWidth, thumbHeight).toFile(path.join(__dirname, '/../..' + uploadDir + 'thumb/' + filename), (err, info) => {
+					// Response 
+					res.status(200).end(JSON.stringify({
+						path: uploadDir + 'thumb/' + filename,
+						fileName: filename
+					}));
+				});
 		}
 	});
 
