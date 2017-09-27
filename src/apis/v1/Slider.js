@@ -7,8 +7,9 @@ exports.getIndex = function (req, res) {
 		'name': 1,
     'link': 1,
     'image': 1,
-		'image_thumb': 1,
-		'image_origin': 1,
+		'thumbnail': 1,
+		'original': 1,
+		'originalAlt': 1,
 	}).exec(function (err, sliders) {
 		if (err) {
 			console.log('err', err)
