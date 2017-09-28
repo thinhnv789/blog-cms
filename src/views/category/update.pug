@@ -23,17 +23,17 @@ block content
                 i.fa.fa-times
           // /.toolbar
         #div-1.body.collapse.in(aria-expanded='true', style='')
-        form.form-horizontal(method='POST', action='/category/create', style="padding: 0 15px;")
+        form.form-horizontal(method='POST', action='/category/update/' + data._id, style="padding: 0 15px;")
           .form-group(class=errors && errors.categoryName && 'has-error')
             label.control-label.col-lg-4(for='categoryname') Category Name
             .col-lg-8
-              input#category-name.form-control(type='text', name='categoryName', value=data ? data.categoryName : '', placeholder='Enter category name', onkeyup='genSlug($(this).val(), "#category-slug");')
+              input#category-name.form-control(type='text', name='categoryName', value=(data ? data.categoryName : ''), placeholder='Enter category name', onkeyup='genSlug($(this).val(), "#category-slug");')
               if errors && errors.categoryName
                 .help-block #{errors.categoryName.msg}
           .form-group
             label.control-label.col-lg-4(for='alias') Alias
             .col-lg-8
-              input#category-slug.form-control(type='text', name='alias', placeholder='Alias')  
+              input#category-slug.form-control(type='text', name='alias', value=data ? data.alias : '', placeholder='Alias')  
           .form-group
             label.control-label.col-lg-4(for='text1', style='display: block; text-align: right;') Parent Category
             .col-lg-8
@@ -51,8 +51,8 @@ block content
             label.control-label.col-lg-4(for='text1') Status
             .col-lg-8
               select.chosen-status(name='status', data-placeholder='Status', style='width: 100px;')
-                option(value=1) Public
-                option(value=0) Draft
+                option(value=1, selected=(data && data.status) ? true : false) Public
+                option(value=0, selected=(data && data.status) ? false : true) Draft
           .form-group  
             .col-lg-4
             .col-lg-8

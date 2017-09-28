@@ -44,9 +44,9 @@ block content
 										option(value=1, selected=(cat.status===1 || cat.status) ? true : false) Public
 										option(value=0, selected=(cat.status===0 || !cat.status) ? true : false) Draft
 								td(align='center')
-									a.btn.btn-default
+									a(href='/category/update/' + cat._id).btn.btn-default
 										em.fa.fa-pencil
-									a.btn.btn-danger
+									a(href='/category/delete/' + cat._id).btn.btn-danger
 										em.fa.fa-trash
 							- i += 1
 							if (cat.children.length > 0)
@@ -61,9 +61,9 @@ block content
 												option(value=1, selected=(child.status===1 || child.status) ? true : false) Public
 												option(value=0, selected=(child.status===0 || !child.status) ? true : false) Draft
 										td(align='center')
-											a.btn.btn-default
+											a(href='/category/update/' + child._id).btn.btn-default
 												em.fa.fa-pencil
-											a.btn.btn-danger
+											a(href='/category/update/' + child._id).btn.btn-danger
 												em.fa.fa-trash
 										- i += 1
 									if (child.children.length > 0)
@@ -78,8 +78,8 @@ block content
 														option(value=1, selected=(c.status===1 || c.status) ? true : false) Public
 														option(value=0, selected=(c.status===0 || !c.status) ? true : false) Draft
 												td(align='center')
-													a.btn.btn-default
+													a(href='/category/update/' + c._id).btn.btn-default
 														em.fa.fa-pencil
-													a.btn.btn-danger
+													a(href='/category/update/' + c._id).btn.btn-danger
 														em.fa.fa-trash
 											- i += 1

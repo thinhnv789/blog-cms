@@ -46,7 +46,7 @@ block content
 								td.text-center #{post.status ? 'Public' : 'Draft'}
 								td.text-center #{post.isHot}
 								td(align='center')
-									a.btn.btn-default
+									a(href='/post/update/' + post._id).btn.btn-default
 										em.fa.fa-pencil
-									a.btn.btn-danger
+									a(href='/post/delete/' + post._id).btn.btn-danger
 										em.fa.fa-trash
