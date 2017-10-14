@@ -49,7 +49,7 @@ exports.postUploadImage = (req, res, next) => {
 	uploadDir = '/media/',
 	prefixFileName = 'image',
 	thumbWidth = 100,
-	thumbHeight = 100;;
+	thumbHeight = 100;
 
 	form.multiples = true;
 
@@ -75,7 +75,7 @@ exports.postUploadImage = (req, res, next) => {
 	form.on('file', function (name, file) {
 		var buffer = null,
 				type = null,
-				filename = '';
+				filename = '', originPath, thumbPath;
 
 		// Read a chunk of the file.
 		buffer = readChunk.sync(file.path, 0, 262);
@@ -86,11 +86,13 @@ exports.postUploadImage = (req, res, next) => {
 		if (type !== null && (type.ext === 'png' || type.ext === 'jpg' || type.ext === 'jpeg')) {
 				// Assign new file name
 				filename = prefixFileName + '-' + Date.now() + '.' + type.ext;
-
+				originPath = path.join(__dirname, '/../..' + uploadDir + 'origin/' + filename);
+				thumbPath = path.join(__dirname, '/../..' + uploadDir + 'thumb/' + filename)
+				
 				// Upload origin image
-				sharp(file.path).toFile(path.join(__dirname, '/../..' + uploadDir + 'origin/' + filename), (err, info) => {});
+				sharp(file.path).toFile(originPath, (err, info) => {});
 				// Upload thumb image
-				sharp(file.path).resize(thumbWidth, thumbHeight).toFile(path.join(__dirname, '/../..' + uploadDir + 'thumb/' + filename), (err, info) => {
+				sharp(file.path).resize(thumbWidth, thumbHeight).toFile(thumbPath, (err, info) => {
 					// Response 
 					res.status(200).end(JSON.stringify({
 						path: uploadDir + 'thumb/' + filename,

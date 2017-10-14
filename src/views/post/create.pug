@@ -43,15 +43,15 @@ block scripts
 			uploadDir: '/media/images/post/',
 			prefixFileName: 'dac-san',
 			thumbWidth: 315,
-			thumbHeight: 210
-			toolbars: [
-				'crop',
-				'zoomIn',
-				'zoomOut',
-				'rotateLeft',
-				'rotateRight',
-				'submitCrop'
-			],
+			thumbHeight: 210,
+			toolbars: {
+				crop : true,
+				zoomIn: true,
+				zoomOut: true,
+				rotateLeft: true,
+				rotateRight: true,
+				submitCrop: true
+			},
 			clientOptions: {
 				aspectRatio: 16 / 9,
 				viewMode: 1,
