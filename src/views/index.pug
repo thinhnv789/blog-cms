@@ -1,19 +1,38 @@
 extends ./layout/main
 block stylesheets
-	link(rel='stylesheet', href='/stylesheets/froala_editor.min.css')
+	link(rel='stylesheet', href='/libs/magnific-popup/dist/magnific-popup.css')
+	link(rel='stylesheet', href='/libs/croppie/croppie.css')
+	link(rel='stylesheet', href='/stylesheets/nodejs-croppie.css')
 block content
 	h1= title
-	p Welcome to #{title} abc
-	textarea#test-editor
+	.actions
+		a.btn.file-btn
+			span Upload
+			input#upload(type='file', value='Choose a file', accept='image/*')
+	.croppie-popup.popup-hidden
+		.popup-overlay
+		.popup-wrap
+			.popup-container
+				.popup-content
+					.demo-wrap.upload-demo
+						.toolbar
+							button#crop.toolbar-button
+								i.fa.fa-crop
+							button#zoomIn.toolbar-button
+								i.fa.fa-search-plus
+							button#zoomOut.toolbar-button
+								i.fa.fa-search-minus
+							button#rotateLeft.toolbar-button
+								i.fa.fa-rotate-left
+							button#rotateRight.toolbar-button
+								i.fa.fa-rotate-right
+							button#submitCrop.toolbar-button
+								i.fa.fa-check
+						#upload-demo
+		
 block scripts
-	script(src='/javascripts/froala_editor.min.js')
-	script(type='text/javascript').
-		$('#test-editor').froalaEditor({
-		heightMin: 280,
-		// Button show xs
-		toolbarButtonsXS: ['bold', 'italic', 'underline', 'fontFamily', 'fontSize', '-', 'insertTable', 'insertImage', 'undo', 'redo'],
-		// Set the image upload URL.
-		imageUploadURL: '/media/upload_image',
-		// Load all images from folder
-		imageManagerLoadURL: '/media/load_images'
-		});
+	script(src='/libs/magnific-popup/dist/jquery.magnific-popup.min.js')
+	script(src='/libs/croppie/croppie.js')
+	script(src='/javascripts/nodejs-croppie.js')
+	script.
+		NodejsCroppie.init();
