@@ -56,7 +56,7 @@
       })
 
       // On crop button clicked
-      document.getElementById('submitCrop').addEventListener('click', function(){
+      $(document).on('click', '#submitCrop', function(){
         /**
          * Show loading when uploading image and hide toolbars
          */
