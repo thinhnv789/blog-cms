@@ -40,7 +40,11 @@
     */ 
     var initHtml = function(selector) {
       var html = '<a class="cropper-popup" href="#cropper-modal"></a>';
-      html += '<div class="cropper-popup-block mfp-hide" id="cropper-modal"><div class="cropper-block image_container" style="width: 600px; height: 400px; margin: auto;"><div class="toolbar"><button class="toolbar-button" id="crop"><i class="fa fa-crop"></i></button><button class="toolbar-button" id="zoomIn"><i class="fa fa-search-plus"></i></button><button class="toolbar-button" id="zoomOut"><i class="fa fa-search-minus"></i></button><button class="toolbar-button" id="rotateLeft"><i class="fa fa-rotate-left"></i></button><button class="toolbar-button" id="rotateRight"><i class="fa fa-rotate-right"></i></button><button class="toolbar-button" id="submitCrop"><i class="fa fa-check"></i></button></div><img id="image-preview" src="#" alt="your image"></div></div>';
+      html += '<div class="cropper-popup-block mfp-hide" id="cropper-modal">';
+      html += '<div class="cropper-block image_container">';
+      html += '<div class="toolbar"><button class="toolbar-button" id="crop"><i class="fa fa-crop"></i></button><button class="toolbar-button" id="zoomIn"><i class="fa fa-search-plus"></i></button><button class="toolbar-button" id="zoomOut"><i class="fa fa-search-minus"></i></button><button class="toolbar-button" id="rotateLeft"><i class="fa fa-rotate-left"></i></button><button class="toolbar-button" id="rotateRight"><i class="fa fa-rotate-right"></i></button><button class="toolbar-button" id="submitCrop"><i class="fa fa-check"></i></button></div><img id="image-preview" src="#" alt="your image">';
+      html += '<div id="fountainG" style="display: none;"><div id="fountainG_1" class="fountainG"></div><div id="fountainG_2" class="fountainG"></div><div id="fountainG_3" class="fountainG"></div><div id="fountainG_4" class="fountainG"></div><div id="fountainG_5" class="fountainG"></div><div id="fountainG_6" class="fountainG"></div><div id="fountainG_7" class="fountainG"></div><div id="fountainG_8" class="fountainG"></div></div>';
+      html += '</div></div>';
       $(html).insertAfter(selector);
       $('.cropper-popup').magnificPopup({
         type: 'inline',
@@ -53,7 +57,12 @@
 
       // On crop button clicked
       document.getElementById('submitCrop').addEventListener('click', function(){
-        console.log('cropper2', this.cropper)
+        /**
+         * Show loading when uploading image and hide toolbars
+         */
+        $('#fountainG').show();
+        $('.toolbar').hide();
+
         var imgurl =  this.cropper.getCroppedCanvas().toDataURL();
         // var img = document.getElementById('image-preview');
         // img.src = imgurl;
@@ -102,7 +111,6 @@
                 inputImgVal += ',' + res.fileName;
                 inputImgEl.value = inputImgVal;
               } else {
-                console.log('not exits');
                 inputImgEl = '<input type="hidden" id="' + ipName + 'filename' + '" name="' + ipName + '" value="' + res.fileName + '">';
               }
               // Insert input with filename after input file
@@ -164,11 +172,6 @@
         this.cropper.destroy();
       }
       this.cropper = new Cropper(image, config.clientOptions);
-
-      // this.cropper.setCropBoxData({
-      //     width: 250,
-      //     height: 140
-      // })
 
       // Show popup image crop
       $('.cropper-popup').click();
