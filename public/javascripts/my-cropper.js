@@ -121,6 +121,9 @@
                 $(config.selector).prev().hide();
                 $(config.selector).hide();
               }
+
+              $('#fountainG').hide();
+              $('.toolbar').show();
               $.magnificPopup.close();
             },
             error: function () {
