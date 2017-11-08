@@ -32,9 +32,9 @@ function CropperEditor(config) {
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                var parentEl, popup, popupOverlay,
+                var bodyNode, popup, popupOverlay, popupWrap,
                     popupContainer, popupContent, imageCrop,
-                    toolbar, cropBtn, zoomInBtn, zoomOutBtn,
+                    toolbar, loading, cropBtn, zoomInBtn, zoomOutBtn,
                     rotateLef, rotateRight, submitCrop;
                 
                 popup = document.createElement('div');
@@ -42,6 +42,9 @@ function CropperEditor(config) {
 
                 popupOverlay = document.createElement('div');
                 popupOverlay.className = 'cropper-editor-popup-overlay';
+
+                popupWrap = document.createElement('div');
+                popupWrap.className = 'cropper-editor-popup-wrap';
 
                 popupContainer = document.createElement('div');
                 popupContainer.className = 'cropper-editor-popup-container';
@@ -122,16 +125,69 @@ function CropperEditor(config) {
                 imageCrop.src = e.target.result;
 
                 /**
+                 * Create loading 
+                 */
+                loading = document.createElement('div');
+                loading.id = 'fountainG';
+                loading.style.display = 'none';
+
+                var loadingItem;
+                loadingItem = document.createElement('div');
+                loadingItem.id = 'fountainG_1';
+                loadingItem.className = 'fountainG';
+                loading.appendChild(loadingItem);
+
+                loadingItem = document.createElement('div');
+                loadingItem.id = 'fountainG_2';
+                loadingItem.className = 'fountainG';
+                loading.appendChild(loadingItem);
+                
+                loadingItem = document.createElement('div');
+                loadingItem.id = 'fountainG_3';
+                loadingItem.className = 'fountainG';
+                loading.appendChild(loadingItem);
+
+                loadingItem = document.createElement('div');
+                loadingItem.id = 'fountainG_4';
+                loadingItem.className = 'fountainG';
+                loading.appendChild(loadingItem);
+
+                loadingItem = document.createElement('div');
+                loadingItem.id = 'fountainG_5';
+                loadingItem.className = 'fountainG';
+                loading.appendChild(loadingItem);
+
+                loadingItem = document.createElement('div');
+                loadingItem.id = 'fountainG_6';
+                loadingItem.className = 'fountainG';
+                loading.appendChild(loadingItem);
+
+                loadingItem = document.createElement('div');
+                loadingItem.id = 'fountainG_7';
+                loadingItem.className = 'fountainG';
+                loading.appendChild(loadingItem);
+
+                loadingItem = document.createElement('div');
+                loadingItem.id = 'fountainG_8';
+                loadingItem.className = 'fountainG';
+                loading.appendChild(loadingItem);
+
+                /**
                  * 
                  */
                 popup.appendChild(popupOverlay);
-                popup.appendChild(popupContainer);
+                popup.appendChild(popupWrap);
+                popupWrap.appendChild(popupContainer);
                 popupContainer.appendChild(popupContent);
                 popupContent.appendChild(toolbar);
+                popupContent.appendChild(loading);
                 popupContent.appendChild(imageCrop);
 
-                parentEl = this.selector.parentNode;
-                parentEl.insertBefore(popup, this.selector);
+                // parentEl = this.selector.parentNode;
+                // parentEl.insertBefore(popup, this.selector);
+                bodyNode = document.getElementsByTagName('body');
+                bodyNode[0].appendChild(popup);
+                // document.body.appendChild(popup);
             }.bind(this);
             reader.readAsDataURL(input.files[0]);
             /**
@@ -160,6 +216,15 @@ function CropperEditor(config) {
      */
     this.submitCrop = function() {
         this.cropper.getCroppedCanvas().toBlob(function (blob) {
+            /**
+             * Show loading and hide toolbar
+             */
+            var loading = document.getElementById('fountainG');
+            loading.style.display = 'block';
+
+            var toolbar = document.getElementsByClassName('cropper-editor-toolbar');
+            toolbar[0].style.display = 'none';
+
             var formData = new FormData();
             formData.append('croppedImage', blob);
             formData.append('uploadDir', config.uploadDir);
@@ -172,64 +237,132 @@ function CropperEditor(config) {
              */
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/media/upload-image', true);
-            xhr.onload = function () {
-                // do something to response
-                var data = JSON.parse(this.responseText);
-                console.log('response', data.path);
-            };
+            xhr.onload = function (response) {
+                console.log('this', response);
+                /**
+                 * Function create image preview item
+                 */
+                function createPreviewImageItem(src, fileName, selector) {
+                    var prvImg = document.createElement('div');
+                    prvImg.className = 'image-preview-item';
+
+                    var rmImg = document.createElement('span');
+                    rmImg.className = 'btn btn-danger btn-xs remove-image';
+                    rmImg.id = 'delete-' + fileName;
+                    rmImg.onclick = function() {
+                        /**
+                         * Remove image
+                         */
+                        var imgDelete = document.getElementById('delete-' + fileName);
+                        if (imgDelete) {
+                            imgDelete.parentNode.remove();
+                        }
+                        /**
+                         * Remove file name in input 
+                         */
+                        var inputEl = document.getElementById('cropper-editor-input-' + selector);
+                        if (inputEl) {
+                            var inputImgVal = inputEl.value;
+                            inputImgVal = inputImgVal.replace(','+fileName, '');
+                            inputImgVal = inputImgVal.replace(','+fileName + ',', '');
+                            inputImgVal = inputImgVal.replace(fileName, '');
+                            
+                            if (inputImgVal == '') {
+                                inputEl.remove();
+
+                                /**
+                                 * Enable input file
+                                 */
+                                var inputFile = document.getElementById(selector);
+                                if (inputFile) {
+                                    inputFile.disabled = false;
+                                    inputFile.value='';
+                                    inputFile.nextSibling.style.display = 'flex';
+                                }
+                            } else {
+                                inputEl.value = inputImgVal;
+                            }
+                        }
+                    }.bind(selector, fileName);
+
+                    var rmImgIcon = document.createElement('i');
+                    rmImgIcon.className = 'fa fa-trash';
+                    rmImg.appendChild(rmImgIcon);
+                    prvImg.appendChild(rmImg);
+
+                    var img = document.createElement('img');
+                    img.src = src;
+
+                    prvImg.appendChild(img);
+
+                    return prvImg;
+                }
+                /**
+                 * Remove popup cropper editor
+                 */
+                var cropperPopup = document.getElementsByClassName('cropper-editor-popup');
+                if (cropperPopup && cropperPopup[0]) {
+                    cropperPopup[0].remove();
+                }
+
+                /**
+                 * Disable input file
+                 */
+                if (!this.config.multiple) {
+                    this.selector.disabled = true;
+                    this.selector.nextSibling.style.display = 'none';
+                }
+
+                /**
+                 * Handle response data and execute functions
+                 */
+                var data = JSON.parse(response.target.responseText);
+
+                var imgPrvItem = createPreviewImageItem(data.path, data.fileName, this.config.selector);
+
+                var imgsPreview = document.getElementById(this.config.selector + '-image-preview');
+                if (imgsPreview) {
+                    imgsPreview.appendChild(imgPrvItem);
+                } else {
+                    imgsPreview = document.createElement('div');
+                    imgsPreview.id = this.config.selector + '-image-preview';
+                    imgsPreview.className = 'image-preview';
+
+                    /**
+                     * Add image
+                     */
+                    imgsPreview.appendChild(imgPrvItem);
+
+                    /**
+                     * Insert image preview before input
+                     */
+                    this.selector.parentNode.insertBefore(imgsPreview, this.selector);
+                }
+                /**
+                 * Create input
+                 */
+                var inputName = this.selector.getAttribute('name');
+                var inputEl = document.getElementById('cropper-editor-input-' + this.config.selector);
+
+                if (inputEl) {
+                    if (inputEl.value == '') {
+                        inputEl.value += data.fileName;
+                    } else {
+                        inputEl.value += ',' + data.fileName;
+                    }
+                } else {
+                    var inputEl = document.createElement('input');
+                    inputEl.id = 'cropper-editor-input-' + this.config.selector;
+                    inputEl.name = inputName;
+                    inputEl.value += data.fileName;
+                    inputEl.type = 'hidden';
+                    this.selector.parentNode.insertBefore(inputEl, this.selector);
+                }
+
+            }.bind(this);
             xhr.send(formData);
-            // $.ajax('/media/upload-image', {
-            //   method: "POST",
-            //   data: formData,
-            //   processData: false,
-            //   contentType: false,
-            //   success: function (res) {
-            //     var res = JSON.parse(res);
-            //     console.log('res', res);
-            //     // Image preview item
-            //     var imageCropped = '<div class="preview-item">';
-            //     imageCropped += '<span class="btn btn-danger btn-xs remove-image" filename='+ res.fileName +'><i class="fa fa-trash"></i></span>';
-            //     imageCropped += '<img class="image-cropped-preview" src="' + res.path + '"/>';
-            //     imageCropped += '</div>';
-            //     // All images preview
-            //     var imagesPreview = document.getElementById('images-preview');
-            //     if (imagesPreview) {
-            //       imagesPreview.innerHTML += imageCropped;
-            //     } else {
-            //       imagePreview = '<div id="images-preview" class="images-preview">';
-            //       imagePreview += imageCropped;
-            //       imagePreview += '</div>';
-            //       // Insert image preview after input
-            //       $(imagePreview).insertAfter( $(config.selector) );
-            //     }
-  
-            //     // Add input value filename in order to post form
-            //     var ipName = $(config.selector).attr('name');
-            //     var inputImgEl = document.getElementById(ipName + 'filename');
-            //     if (inputImgEl) {
-            //       var inputImgVal = inputImgEl.value;
-            //       inputImgVal += ',' + res.fileName;
-            //       inputImgEl.value = inputImgVal;
-            //     } else {
-            //       inputImgEl = '<input type="hidden" id="' + ipName + 'filename' + '" name="' + ipName + '" value="' + res.fileName + '">';
-            //     }
-            //     // Insert input with filename after input file
-            //     $(inputImgEl).insertAfter( $(config.selector) );
-            //     // Hide label browse image
-            //     if (!config.multiple) {
-            //       $(config.selector).attr('disabled', true);
-            //       $(config.selector).prev().hide();
-            //       $(config.selector).hide();
-            //     }
-  
-            //     $('#fountainG').hide();
-            //     $('.toolbar').show();
-            //     $.magnificPopup.close();
-            //   },
-            //   error: function () {
-            //     console.log('Upload error');
-            //   }
-            // });
-          });
+        }.bind(this));
     }
+
+
 }

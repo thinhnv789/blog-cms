@@ -2,19 +2,17 @@ extends ../layout/main
 block stylesheets
 	link(rel='stylesheet', href='/stylesheets/froala_editor.min.css')
 	link(rel='stylesheet', href='/libs/cropperjs/dist/cropper.min.css')
-	link(rel='stylesheet', href='/libs/magnific-popup/dist/magnific-popup.css')
 	link(rel='stylesheet', href='/stylesheets/jquery-ui.min.css')
 	link(rel='stylesheet', href='/libs/jquery-tags-input/dist/jquery.tagsinput.min.css')
 	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
-	link(rel='stylesheet', href='/stylesheets/my-cropper.css')
+	link(rel='stylesheet', href='/stylesheets/cropper-editor.css')
 block scripts
 	script(src='/javascripts/froala_editor.min.js')
 	script(src='/libs/cropperjs/dist/cropper.min.js')
-	script(src='/libs/magnific-popup/dist/jquery.magnific-popup.min.js')
 	script(src='/javascripts/jquery-ui.min.js')
 	script(src='/libs/jquery-tags-input/dist/jquery.tagsinput.min.js')
 	script(src='/javascripts/bootstrap-chosen.js')
-	script(src='/javascripts/my-cropper.js')
+	script(src='/javascripts/cropper-editor.js')
 
 	script.
 		$(function() {
@@ -32,9 +30,9 @@ block scripts
 		imageManagerLoadURL: '/media/load_images'
 		});
 	script(type='text/javascript').
-		var productCropper = new myCropper({ 
-			selector : '#product-image',
-			uploadDir: '/media/images/',
+		var cropperEditor = new CropperEditor({ 
+			selector : 'product-image',
+			uploadDir: '/media/images/product/',
 			prefixFileName: 'product',
 			thumbWidth: 250,
 			thumbHeight: 142,
@@ -55,6 +53,7 @@ block scripts
 				minContainerHeight: 400,
 			}
 		});
+		cropperEditor.init();
 		$('#product-form').submit(function(){
 			$('#product-image').remove();
 		});
@@ -120,10 +119,9 @@ block content
 														i.fa.fa-trash
 													img.image-cropped-preview(src='/media/images/' + img)
 									else
+										input#product-image.mycropper-browse-file(type='file', name='image')
 										label.custom-file-upload(for='product-image')
 											i.fa.fa-cloud-upload
-										input#product-image.mycropper-browse-file(type='file', name='image')
-										//- input#post-image.form-control(type='file', name='image')
 									if errors && errors.image
 										.help-block #{errors.image.msg}
 								.col-lg-6(class=errors && errors.description && 'has-error')
