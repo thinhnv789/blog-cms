@@ -1,21 +1,19 @@
 extends ../layout/main
 block stylesheets
 	link(rel='stylesheet', href='/libs/cropperjs/dist/cropper.min.css')
-	link(rel='stylesheet', href='/libs/magnific-popup/dist/magnific-popup.css')
 	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
-	link(rel='stylesheet', href='/stylesheets/my-cropper.css')
+	link(rel='stylesheet', href='/stylesheets/cropper-editor.css')
 block scripts
 	script(src='/libs/cropperjs/dist/cropper.min.js')
-	script(src='/libs/magnific-popup/dist/jquery.magnific-popup.min.js')
 	script(src='/javascripts/bootstrap-chosen.js')
-	script(src='/javascripts/my-cropper.js')
+	script(src='/javascripts/cropper-editor.js')
 
 	script.
 		$(function() {
 		$('.chosen-status').chosen({ allow_single_deselect: true, disable_search: true });
 		});
 	script(type='text/javascript').
-		var slideCropper = new myCropper({ 
+		var cropperEditor = new CropperEditor({ 
 			selector : '#slider-image',
 			uploadDir: '/media/images/slider/',
 			prefixFileName: 'slide',
@@ -36,6 +34,7 @@ block scripts
 				minContainerHeight: 400,
 			}
 		});
+		cropperEditor.init();
 block content
 	.row
 		.col-lg-12
@@ -70,12 +69,12 @@ block content
 								label.custom-file-upload(for='post-image', style='display: none;')
 									i.fa.fa-cloud-upload
 								input#slider-image.mycropper-browse-file(type='file', name='image', disabled=true)
-								input#imagefilename(type='hidden', name='image', value=data.image)
-								.images-preview
-									.preview-item
-										span.btn.btn-danger.btn-xs.remove-image
+								input#cropper-editor-input-post-image(type='hidden', name='image', value=data.image)
+								#slider-image-image-preview.image-preview
+									.image-preview-item
+										span.btn.btn-danger.btn-xs.remove-image(id='delete-' + data.image)
 											i.fa.fa-trash
-										img.image-cropped-preview(src='/media/images/slider/' + data.image)
+										img(src='/media/images/slider/thumb/' + data.image)
 							else
 								label.custom-file-upload(for='slider-image')
 									i.fa.fa-cloud-upload
