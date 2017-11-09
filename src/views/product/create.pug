@@ -110,14 +110,14 @@ block content
 										label.custom-file-upload(for='product-image', style='display: none;')
 											i.fa.fa-cloud-upload
 										input#product-image.mycropper-browse-file(type='file', name='image', disabled=true)
-										input#imagefilename(type='hidden', name='image', value=data.image)
-										.images-preview
+										input#cropper-editor-input-product-image(type='hidden', name='image', value=data.image)
+										#slider-image-image-preview.image-preview
 											- var images = data.image.split(',')
 											for img in images
-												.preview-item
-													span.btn.btn-danger.btn-xs.remove-image
+												.image-preview-item
+													span.btn.btn-danger.btn-xs.remove-image(id='delete-' + img)
 														i.fa.fa-trash
-													img.image-cropped-preview(src='/media/images/' + img)
+													img(src='/media/images/slider/thumb/' + img)
 									else
 										input#product-image.mycropper-browse-file(type='file', name='image')
 										label.custom-file-upload(for='product-image')
